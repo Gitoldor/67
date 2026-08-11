@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Feed</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f5f6f8;
+  --card:#fff;
+  --text:#111318;
+  --muted:#747b87;
+  --line:#e5e7eb;
+  --blue:#2563eb;
+  --red:#ef4444;
+  --radius:18px;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  max-width:1080px;
+  margin:auto;
+  padding:13px 18px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.logo{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.8px;
+}
+.search{
+  width:min(390px,50vw);
+  margin-left:auto;
+  border:1px solid var(--line);
+  background:#f8f9fa;
+  border-radius:999px;
+  padding:10px 16px;
+  outline:none;
+}
+.search:focus{background:#fff;border-color:#c7ccd4}
+
+.container{
+  max-width:1080px;
+  margin:auto;
+  padding:22px 18px 50px;
+}
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,700px) 240px;
+  gap:24px;
+  justify-content:center;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 5px 24px rgba(15,23,42,.035);
+}
+
+.composer{
+  padding:17px;
+  margin-bottom:15px;
+}
+.composer textarea{
+  width:100%;
+  min-height:90px;
+  resize:vertical;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-size:16px;
+  line-height:1.5;
+}
+.composer-footer{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding-top:8px;
+}
+.composer-footer .grow{flex:1}
+.select,.media-input{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:9px 10px;
+  outline:none;
+}
+.media-input{width:100%}
+.post-button{
+  border:0;
+  background:#111827;
+  color:#fff;
+  border-radius:10px;
+  padding:10px 17px;
+  font-weight:800;
+}
+.media-row{
+  display:grid;
+  grid-template-columns:1fr 120px;
+  gap:8px;
+  margin-top:10px;
+}
+
+.post{
+  padding:17px;
+  margin-bottom:14px;
+}
+.post-header{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#e8ebef;
+}
+.avatar-fallback{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#e8ebef;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+.author-name{font-weight:850}
+.author-meta{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:2px;
+}
+.more{
+  margin-left:auto;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:23px;
+}
+.post-content{
+  margin:14px 1px;
+  font-size:15.5px;
+  line-height:1.65;
+  white-space:pre-wrap;
+}
+.post-media{
+  display:block;
+  width:100%;
+  max-height:560px;
+  object-fit:cover;
+  border-radius:14px;
+  background:#edf0f3;
+}
+.post-video{background:#000}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:11px;
+}
+.tag{
+  background:#f0f2f5;
+  color:#59616d;
+  border-radius:999px;
+  padding:5px 9px;
+  font-size:12px;
+}
+
+.actions{
+  display:flex;
+  gap:3px;
+  border-top:1px solid var(--line);
+  margin-top:14px;
+  padding-top:9px;
+}
+.action{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:9px;
+  font-weight:700;
+}
+.action:hover{background:#f2f3f5;color:var(--text)}
+.like.active{color:var(--red)}
+
+.sidebar{
+  position:sticky;
+  top:80px;
+  padding:16px;
+  height:max-content;
+}
+.sidebar-title{
+  font-weight:850;
+  margin-bottom:10px;
+}
+.category{
+  width:100%;
+  display:block;
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:9px 10px;
+  border-radius:9px;
+  color:#606874;
+}
+.category:hover,
+.category.active{
+  background:#f0f2f5;
+  color:var(--text);
+  font-weight:800;
+}
+
+.status{
+  text-align:center;
+  padding:30px 15px;
+  color:var(--muted);
+}
+.error{
+  display:none;
+  background:#fff1f2;
+  border:1px solid #fecdd3;
+  color:#b42318;
+  padding:12px 14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  font-size:14px;
+}
+.comments{
+  margin-top:12px;
+  border-top:1px solid var(--line);
+  padding-top:12px;
+  display:none;
+}
+.comment{
+  display:flex;
+  gap:9px;
+  padding:8px 0;
+}
+.comment-avatar{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#e8ebef;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:800;
+  flex:none;
+}
+.comment-body{
+  background:#f5f6f8;
+  padding:8px 11px;
+  border-radius:12px;
+  flex:1;
+}
+.comment-author{font-weight:750;font-size:13px}
+.comment-text{font-size:13px;line-height:1.45;margin-top:2px}
+.comment-form{
+  display:flex;
+  gap:7px;
+  margin-top:9px;
+}
+.comment-form input{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px 11px;
+  outline:none;
+}
+.comment-form button{
+  border:0;
+  background:#111827;
+  color:white;
+  border-radius:10px;
+  padding:9px 12px;
+}
+
+@media(max-width:820px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+@media(max-width:600px){
+  .container{padding:12px 10px 40px}
+  .nav{padding:12px 10px}
+  .logo{font-size:19px}
+  .search{width:45vw}
+  .composer,.post{border-radius:14px}
+  .composer-footer{align-items:stretch}
+  .media-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <nav class="nav">
+    <div class="logo">Post Feed</div>
+    <input id="searchInput" class="search" type="search" placeholder="Search posts...">
+  </nav>
+</header>
+
+<main class="container">
+
+  <div id="errorBox" class="error"></div>
+
+  <div class="layout">
+
+    <section>
+
+      <!-- POST COMPOSER -->
+      <div class="card composer">
+
+        <textarea
+          id="postContent"
+          placeholder="What's on your mind?"
+        ></textarea>
+
+        <div class="media-row">
+          <input
+            id="mediaUrl"
+            class="media-input"
+            type="url"
+            placeholder="Image or video URL (optional)"
+          >
+
+          <select id="mediaType" class="select">
+            <option value="None">No media</option>
+            <option value="Image">Image</option>
+            <option value="Video">Video</option>
+          </select>
+        </div>
+
+        <div class="composer-footer">
+
+          <select id="postCategory" class="select grow">
+            <option value="General">General</option>
+            <option value="Technology">Technology</option>
+            <option value="Business">Business</option>
+            <option value="Education">Education</option>
+            <option value="Automotive">Automotive</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="News">News</option>
+          </select>
+
+          <button id="publishButton" class="post-button">
+            Post
+          </button>
+
+        </div>
+      </div>
+
+      <div id="status" class="status">
+        Loading posts...
+      </div>
+
+      <div id="feed"></div>
+
+    </section>
+
+    <!-- CATEGORY SIDEBAR -->
+    <aside class="card sidebar">
+
+      <div class="sidebar-title">Explore</div>
+
+      <button class="category active" data-category="All">
+        All posts
+      </button>
+
+      <button class="category" data-category="General">
+        General
+      </button>
+
+      <button class="category" data-category="Technology">
+        Technology
+      </button>
+
+      <button class="category" data-category="Business">
+        Business
+      </button>
+
+      <button class="category" data-category="Education">
+        Education
+      </button>
+
+      <button class="category" data-category="Automotive">
+        Automotive
+      </button>
+
+      <button class="category" data-category="Lifestyle">
+        Lifestyle
+      </button>
+
+      <button class="category" data-category="News">
+        News
+      </button>
+
+    </aside>
+
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   AIRTABLE CONFIGURATION
+   ============================================================
+
+   This is intentionally kept in JavaScript because this is
+   your private/testing build.
+
+   Replace AIRTABLE_TOKEN with your real Personal Access Token.
+
+   Required Airtable token scopes:
+     data.records:read
+     data.records:write
+
+   Your token must have access to this base.
+   ============================================================ */
+
+const AIRTABLE_TOKEN = "PASTE_YOUR_AIRTABLE_TOKEN_HERE";
+
+const AIRTABLE_BASE_ID = "appap6MZQoDk1wdkw";
+
+const POSTS_TABLE = "Posts";
+const COMMENTS_TABLE = "Comments";
+
+const AIRTABLE_API =
+  `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}`;
+
+
+/* ============================================================
+   CURRENT TEST USER
+   ============================================================ */
+
+const CURRENT_USER = {
+  name: "Gogeta",
+  username: "gogeta",
+  avatarUrl: ""
+};
+
+
+/* ============================================================
+   GLOBAL STATE
+   ============================================================ */
+
+let posts = [];
+let selectedCategory = "All";
+let searchQuery = "";
+let expandedComments = new Set();
+
+
+/* ============================================================
+   BASIC HELPERS
+   ============================================================ */
+
+function airtableHeaders(){
+
+  return {
+    "Authorization": `Bearer ${AIRTABLE_TOKEN}`,
+    "Content-Type": "application/json"
+  };
+
+}
+
+
+function tableURL(table){
+
+  return `${AIRTABLE_API}/${encodeURIComponent(table)}`;
+
+}
+
+
+function escapeHTML(value = ""){
+
+  return String(value).replace(/[&<>"']/g, character => {
+
+    const entities = {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    };
+
+    return entities[character];
+
+  });
+
+}
+
+
+function getInitials(name = "User"){
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(part => part[0])
+    .join("")
+    .toUpperCase();
+
+}
+
+
+function timeAgo(timestamp){
+
+  if(!timestamp) return "";
+
+  const difference =
+    Math.max(1, Date.now() - new Date(timestamp).getTime());
+
+  const seconds = Math.floor(difference / 1000);
+
+  if(seconds < 60)
+    return `${seconds}s`;
+
+  const minutes = Math.floor(seconds / 60);
+
+  if(minutes < 60)
+    return `${minutes}m`;
+
+  const hours = Math.floor(minutes / 60);
+
+  if(hours < 24)
+    return `${hours}h`;
+
+  const days = Math.floor(hours / 24);
+
+  if(days < 30)
+    return `${days}d`;
+
+  return new Date(timestamp).toLocaleDateString();
+
+}
+
+
+function showError(message){
+
+  const box = document.getElementById("errorBox");
+
+  box.textContent = message;
+
+  box.style.display = "block";
+
+}
+
+
+function clearError(){
+
+  const box = document.getElementById("errorBox");
+
+  box.textContent = "";
+
+  box.style.display = "none";
+
+}
+
+
+/* ============================================================
+   AIRTABLE REQUEST WRAPPER
+   ============================================================ */
+
+async function airtableRequest(url, options = {}){
+
+  const response = await fetch(url, {
+
+    ...options,
+
+    headers:{
+      ...airtableHeaders(),
+      ...(options.headers || {})
+    }
+
+  });
+
+
+  let data = {};
+
+  try{
+    data = await response.json();
+  }
+  catch{
+    data = {};
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data?.error?.message ||
+      `Airtable request failed (${response.status})`
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* ============================================================
+   NORMALIZE AIRTABLE POST RECORD
+   ============================================================ */
+
+function normalizePost(record){
+
+  const fields = record.fields || {};
+
+  return {
+
+    recordId: record.id,
+
+    postId:
+      fields["Post ID"] ||
+      record.id,
+
+    authorName:
+      fields["Author Name"] ||
+      "Anonymous",
+
+    authorUsername:
+      fields["Author Username"] ||
+      "user",
+
+    authorAvatarUrl:
+      fields["Author Avatar URL"] ||
+      "",
+
+    content:
+      fields["Content"] ||
+      "",
+
+    mediaUrl:
+      fields["Media URL"] ||
+      "",
+
+    mediaType:
+      typeof fields["Media Type"] === "object"
+        ? fields["Media Type"].name
+        : fields["Media Type"] || "None",
+
+    category:
+      typeof fields["Category"] === "object"
+        ? fields["Category"].name
+        : fields["Category"] || "General",
+
+    tags:
+      Array.isArray(fields["Tags"])
+        ? fields["Tags"].map(tag =>
+            typeof tag === "object"
+              ? tag.name
+              : tag
+          )
+        : [],
+
+    status:
+      typeof fields["Status"] === "object"
+        ? fields["Status"].name
+        : fields["Status"] || "Published",
+
+    likes:
+      Number(fields["Likes"] || 0),
+
+    comments:
+      Number(fields["Comments"] || 0),
+
+    shares:
+      Number(fields["Shares"] || 0),
+
+    views:
+      Number(fields["Views"] || 0),
+
+    createdAt:
+      fields["Created At"] ||
+      record.createdTime,
+
+    updatedAt:
+      fields["Updated At"] ||
+      record.createdTime
+
+  };
+
+}
+
+
+/* ============================================================
+   LOAD POSTS
+   ============================================================ */
+
+async function getPosts(){
+
+  const records = [];
+
+  let offset = null;
+
+
+  do{
+
+    const params = new URLSearchParams();
+
+    params.set("pageSize", "100");
+
+    params.set(
+      "filterByFormula",
+      '{Status}="Published"'
+    );
+
+    params.set(
+      "sort[0][field]",
+      "Created At"
+    );
+
+    params.set(
+      "sort[0][direction]",
+      "desc"
+    );
+
+
+    if(offset){
+
+      params.set("offset", offset);
+
+    }
+
+
+    const data = await airtableRequest(
+      `${tableURL(POSTS_TABLE)}?${params.toString()}`
+    );
+
+
+    records.push(
+      ...(data.records || [])
+    );
+
+
+    offset = data.offset || null;
+
+  }
+  while(offset);
+
+
+  return records.map(normalizePost);
+
+}
+
+
+/* ============================================================
+   CREATE POST
+   ============================================================ */
+
+async function createPost({
+
+  content,
+  category,
+  mediaUrl = "",
+  mediaType = "None"
+
+}){
+
+  const now =
+    new Date().toISOString();
+
+
+  const fields = {
+
+    "Post ID":
+      `post_${crypto.randomUUID()}`,
+
+    "Author Name":
+      CURRENT_USER.name,
+
+    "Author Username":
+      CURRENT_USER.username,
+
+    "Author Avatar URL":
+      CURRENT_USER.avatarUrl,
+
+    "Content":
+      content,
+
+    "Media URL":
+      mediaUrl,
+
+    "Media Type":
+      mediaType,
+
+    "Category":
+      category,
+
+    "Tags":
+      [],
+
+    "Status":
+      "Published",
+
+    "Likes":
+      0,
+
+    "Comments":
+      0,
+
+    "Shares":
+      0,
+
+    "Views":
+      0,
+
+    "Created At":
+      now,
+
+    "Updated At":
+      now
+
+  };
+
+
+  return airtableRequest(
+    tableURL(POSTS_TABLE),
+    {
+
+      method:"POST",
+
+      body:JSON.stringify({
+
+        records:[
+          {
+            fields
+          }
+        ],
+
+        typecast:true
+
+      })
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   UPDATE POST
+   ============================================================ */
+
+async function updatePost(recordId, fields){
+
+  return airtableRequest(
+    `${tableURL(POSTS_TABLE)}/${recordId}`,
+    {
+
+      method:"PATCH",
+
+      body:JSON.stringify({
+
+        fields,
+
+        typecast:true
+
+      })
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   LIKE POST
+   ============================================================ */
+
+async function likePost(post){
+
+  const newLikes =
+    Number(post.likes || 0) + 1;
+
+
+  await updatePost(
+
+    post.recordId,
+
+    {
+      "Likes":newLikes,
+      "Updated At":new Date().toISOString()
+    }
+
+  );
+
+
+  post.likes = newLikes;
+
+  renderFeed();
+
+}
+
+
+/* ============================================================
+   ADD COMMENT
+   ============================================================ */
+
+async function addComment(post, text){
+
+  if(!text.trim())
+    return;
+
+
+  const commentId =
+    `comment_${crypto.randomUUID()}`;
+
+
+  const fields = {
+
+    "Comment ID":
+      commentId,
+
+    "Post ID":
+      post.postId,
+
+    "Author Name":
+      CURRENT_USER.name,
+
+    "Author Username":
+      CURRENT_USER.username,
+
+    "Author Avatar URL":
+      CURRENT_USER.avatarUrl,
+
+    "Comment":
+      text.trim(),
+
+    "Likes":
+      0,
+
+    "Created At":
+      new Date().toISOString()
+
+  };
+
+
+  await airtableRequest(
+
+    tableURL(COMMENTS_TABLE),
+
+    {
+
+      method:"POST",
+
+      body:JSON.stringify({
+
+        records:[
+          {
+            fields
+          }
+        ],
+
+        typecast:true
+
+      })
+
+    }
+
+  );
+
+
+  const newCount =
+    Number(post.comments || 0) + 1;
+
+
+  await updatePost(
+
+    post.recordId,
+
+    {
+      "Comments":newCount,
+      "Updated At":new Date().toISOString()
+    }
+
+  );
+
+
+  post.comments = newCount;
+
+  renderFeed();
+
+}
+
+
+/* ============================================================
+   GET COMMENTS FOR POST
+   ============================================================ */
+
+async function getComments(postId){
+
+  const params =
+    new URLSearchParams();
+
+
+  params.set(
+
+    "filterByFormula",
+
+    `{Post ID}="${postId.replace(/"/g,'\\"')}"`
+
+  );
+
+
+  params.set(
+    "sort[0][field]",
+    "Created At"
+  );
+
+
+  params.set(
+    "sort[0][direction]",
+    "asc"
+  );
+
+
+  const data =
+    await airtableRequest(
+
+      `${tableURL(COMMENTS_TABLE)}?${params.toString()}`
+
+    );
+
+
+  return data.records || [];
+
+}
+
+
+/* ============================================================
+   RENDER MEDIA
+   ============================================================ */
+
+function renderMedia(post){
+
+  if(
+    !post.mediaUrl ||
+    post.mediaType === "None"
+  ){
+
+    return "";
+
+  }
+
+
+  const url =
+    escapeHTML(post.mediaUrl);
+
+
+  if(post.mediaType === "Video"){
+
+    return `
+      <video
+        class="post-media post-video"
+        src="${url}"
+        controls
+        preload="metadata"
+      ></video>
+    `;
+
+  }
+
+
+  return `
+    <img
+      class="post-media"
+      src="${url}"
+      loading="lazy"
+      alt="Post media"
+      onerror="this.style.display='none'"
+    >
+  `;
+
+}
+
+
+/* ============================================================
+   RENDER COMMENTS
+   ============================================================ */
+
+function renderCommentsContainer(post){
+
+  if(
+    !expandedComments.has(post.recordId)
+  ){
+
+    return "";
+
+  }
+
+
+  return `
+
+    <div
+      class="comments"
+      style="display:block"
+      id="comments-${post.recordId}"
+    >
+
+      <div class="comments-loading">
+        Loading comments...
+      </div>
+
+      <div class="comment-form">
+
+        <input
+          class="comment-input"
+          data-post="${post.recordId}"
+          placeholder="Write a comment..."
+        >
+
+        <button
+          class="comment-submit"
+          data-post="${post.recordId}"
+        >
+          Send
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   RENDER POST
+   ============================================================ */
+
+function renderPost(post){
+
+  const avatar =
+
+    post.authorAvatarUrl
+
+      ?
+
+    `
+      <img
+        class="avatar"
+        src="${escapeHTML(post.authorAvatarUrl)}"
+        alt=""
+      >
+    `
+
+      :
+
+    `
+      <div class="avatar-fallback">
+        ${escapeHTML(getInitials(post.authorName))}
+      </div>
+    `;
+
+
+  const tags =
+
+    post.tags.length
+
+      ?
+
+    `
+      <div class="tags">
+
+        ${post.tags.map(tag => `
+
+          <span class="tag">
+            #${escapeHTML(tag)}
+          </span>
+
+        `).join("")}
+
+      </div>
+    `
+
+      :
+
+    "";
+
+
+  return `
+
+    <article
+      class="card post"
+      data-record-id="${escapeHTML(post.recordId)}"
+    >
+
+      <div class="post-header">
+
+        ${avatar}
+
+        <div>
+
+          <div class="author-name">
+            ${escapeHTML(post.authorName)}
+          </div>
+
+          <div class="author-meta">
+            @${escapeHTML(post.authorUsername)}
+            ·
+            ${timeAgo(post.createdAt)}
+          </div>
+
+        </div>
+
+        <button class="more">
+          ⋯
+        </button>
+
+      </div>
+
+
+      <div class="post-content">
+        ${escapeHTML(post.content)}
+      </div>
+
+
+      ${renderMedia(post)}
+
+      ${tags}
+
+
+      <div class="actions">
+
+        <button
+          class="action like"
+          data-id="${escapeHTML(post.recordId)}"
+        >
+          ♥ ${post.likes}
+        </button>
+
+
+        <button
+          class="action comment-button"
+          data-id="${escapeHTML(post.recordId)}"
+        >
+          💬 ${post.comments}
+        </button>
+
+
+        <button
+          class="action share-button"
+          data-id="${escapeHTML(post.recordId)}"
+        >
+          ↗ ${post.shares}
+        </button>
+
+
+        <button
+          class="action"
+          style="margin-left:auto"
+        >
+          👁 ${post.views}
+        </button>
+
+      </div>
+
+
+      ${renderCommentsContainer(post)}
+
+    </article>
+
+  `;
+
+}
+
+
+/* ============================================================
+   FILTER + RENDER FEED
+   ============================================================ */
+
+function renderFeed(){
+
+  const filtered =
+    posts.filter(post => {
+
+      const categoryMatch =
+
+        selectedCategory === "All" ||
+
+        post.category ===
+        selectedCategory;
+
+
+      const searchText = `
+
+        ${post.content}
+
+        ${post.authorName}
+
+        ${post.authorUsername}
+
+        ${post.category}
+
+      `.toLowerCase();
+
+
+      const searchMatch =
+        searchText.includes(
+          searchQuery.toLowerCase()
+        );
+
+
+      return categoryMatch && searchMatch;
+
+    });
+
+
+  const feed =
+    document.getElementById("feed");
+
+
+  feed.innerHTML =
+    filtered.map(renderPost).join("");
+
+
+  document
+    .getElementById("status")
+    .style.display =
+      filtered.length
+        ? "none"
+        : "block";
+
+
+  bindFeedEvents();
+
+}
+
+
+/* ============================================================
+   LOAD COMMENTS INTO A POST
+   ============================================================ */
+
+async function loadComments(post){
+
+  const container =
+    document.getElementById(
+      `comments-${post.recordId}`
+    );
+
+
+  if(!container)
+    return;
+
+
+  try{
+
+    const records =
+      await getComments(
+        post.postId
+      );
+
+
+    const html =
+      records.map(record => {
+
+        const fields =
+          record.fields || {};
+
+
+        const name =
+          fields["Author Name"] ||
+          "User";
+
+
+        return `
+
+          <div class="comment">
+
+            <div class="comment-avatar">
+
+              ${escapeHTML(
+                getInitials(name)
+              )}
+
+            </div>
+
+            <div class="comment-body">
+
+              <div class="comment-author">
+
+                ${escapeHTML(name)}
+
+              </div>
+
+              <div class="comment-text">
+
+                ${escapeHTML(
+                  fields["Comment"] || ""
+                )}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+    container.querySelector(
+      ".comments-loading"
+    ).outerHTML =
+
+      html ||
+
+      `<div class="comments-loading">
+        No comments yet.
+      </div>`;
+
+
+  }
+  catch(error){
+
+    container.querySelector(
+      ".comments-loading"
+    ).textContent =
+      "Could not load comments.";
+
+  }
+
+}
+
+
+/* ============================================================
+   FEED EVENTS
+   ============================================================ */
+
+function bindFeedEvents(){
+
+  document
+    .querySelectorAll(".like")
+    .forEach(button => {
+
+      button.onclick = async () => {
+
+        const post =
+          posts.find(
+            item =>
+              item.recordId ===
+              button.dataset.id
+          );
+
+
+        if(!post)
+          return;
+
+
+        button.disabled = true;
+
+
+        try{
+
+          await likePost(post);
+
+        }
+        catch(error){
+
+          showError(
+            "Like failed: " +
+            error.message
+          );
+
+        }
+        finally{
+
+          button.disabled = false;
+
+        }
+
+      };
+
+    });
+
+
+  document
+    .querySelectorAll(".comment-button")
+    .forEach(button => {
+
+      button.onclick = async () => {
+
+        const post =
+          posts.find(
+            item =>
+              item.recordId ===
+              button.dataset.id
+          );
+
+
+        if(!post)
+          return;
+
+
+        if(
+          expandedComments.has(
+            post.recordId
+          )
+        ){
+
+          expandedComments.delete(
+            post.recordId
+          );
+
+        }
+        else{
+
+          expandedComments.add(
+            post.recordId
+          );
+
+        }
+
+
+        renderFeed();
+
+
+        if(
+          expandedComments.has(
+            post.recordId
+          )
+        ){
+
+          await loadComments(post);
+
+        }
+
+      };
+
+    });
+
+
+  document
+    .querySelectorAll(".comment-submit")
+    .forEach(button => {
+
+      button.onclick = async () => {
+
+        const post =
+          posts.find(
+            item =>
+              item.recordId ===
+              button.dataset.post
+          );
+
+
+        const input =
+          document.querySelector(
+            `.comment-input[data-post="${post.recordId}"]`
+          );
+
+
+        if(!input || !input.value.trim())
+          return;
+
+
+        button.disabled = true;
+
+
+        try{
+
+          await addComment(
+            post,
+            input.value
+          );
+
+          expandedComments.add(
+            post.recordId
+          );
+
+          renderFeed();
+
+          await loadComments(post);
+
+        }
+        catch(error){
+
+          showError(
+            "Comment failed: " +
+            error.message
+          );
+
+        }
+        finally{
+
+          button.disabled = false;
+
+        }
+
+      };
+
+    });
+
+
+  document
+    .querySelectorAll(".share-button")
+    .forEach(button => {
+
+      button.onclick = async () => {
+
+        const post =
+          posts.find(
+            item =>
+              item.recordId ===
+              button.dataset.id
+          );
+
+
+        if(!post)
+          return;
+
+
+        const shareURL =
+          `${location.href}#post=${post.postId}`;
+
+
+        try{
+
+          if(
+            navigator.share
+          ){
+
+            await navigator.share({
+
+              title:"Post Feed",
+
+              text:post.content,
+
+              url:shareURL
+
+            });
+
+          }
+          else{
+
+            await navigator.clipboard.writeText(
+              shareURL
+            );
+
+            alert(
+              "Post link copied."
+            );
+
+          }
+
+
+          const newShares =
+            Number(post.shares || 0) + 1;
+
+
+          await updatePost(
+            post.recordId,
+            {
+              "Shares":newShares,
+              "Updated At":
+                new Date().toISOString()
+            }
+          );
+
+
+          post.shares =
+            newShares;
+
+
+          renderFeed();
+
+        }
+        catch(error){
+
+          if(
+            error.name !==
+            "AbortError"
+          ){
+
+            showError(
+              "Share failed: " +
+              error.message
+            );
+
+          }
+
+        }
+
+      };
+
+    });
+
+}
+
+
+/* ============================================================
+   PUBLISH BUTTON
+   ============================================================ */
+
+document
+  .getElementById("publishButton")
+  .onclick = async () => {
+
+    clearError();
+
+
+    const content =
+      document
+        .getElementById("postContent")
+        .value.trim();
+
+
+    const category =
+      document
+        .getElementById("postCategory")
+        .value;
+
+
+    const mediaUrl =
+      document
+        .getElementById("mediaUrl")
+        .value.trim();
+
+
+    const mediaType =
+      document
+        .getElementById("mediaType")
+        .value;
+
+
+    if(!content){
+
+      showError(
+        "Write something before posting."
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "publishButton"
+      );
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Posting...";
+
+
+    try{
+
+      await createPost({
+
+        content,
+
+        category,
+
+        mediaUrl,
+
+        mediaType
+
+      });
+
+
+      document
+        .getElementById("postContent")
+        .value = "";
+
+
+      document
+        .getElementById("mediaUrl")
+        .value = "";
+
+
+      document
+        .getElementById("mediaType")
+        .value =
+          "None";
+
+
+      await refreshFeed();
+
+    }
+    catch(error){
+
+      showError(
+        "Could not publish: " +
+        error.message
+      );
+
+    }
+    finally{
+
+      button.disabled = false;
+
+      button.textContent =
+        "Post";
+
+    }
+
+  };
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+document
+  .getElementById("searchInput")
+  .addEventListener(
+    "input",
+    event => {
+
+      searchQuery =
+        event.target.value.trim();
+
+      renderFeed();
+
+    }
+  );
+
+
+/* ============================================================
+   CATEGORY FILTER
+   ============================================================ */
+
+document
+  .querySelectorAll(".category")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      selectedCategory =
+        button.dataset.category;
+
+
+      document
+        .querySelectorAll(".category")
+        .forEach(item =>
+          item.classList.remove(
+            "active"
+          )
+        );
+
+
+      button.classList.add(
+        "active"
+      );
+
+
+      renderFeed();
+
+    };
+
+  });
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+
+async function refreshFeed(){
+
+  clearError();
+
+
+  document
+    .getElementById("status")
+    .style.display =
+      "block";
+
+
+  document
+    .getElementById("status")
+    .textContent =
+      "Loading posts...";
+
+
+  try{
+
+    posts =
+      await getPosts();
+
+
+    posts.sort(
+      (a,b) =>
+        new Date(b.createdAt) -
+        new Date(a.createdAt)
+    );
+
+
+    renderFeed();
+
+  }
+  catch(error){
+
+    document
+      .getElementById("status")
+      .textContent =
+        "Unable to load the feed.";
+
+
+    showError(
+      "Airtable error: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* START */
+
+refreshFeed();
+
+</script>
+
+</body>
+</html>
