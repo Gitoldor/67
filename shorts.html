@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shorts</title>
+  <style>
+    :root {
+      --bg-color: #0f0f0f;
+      --card-bg: #212121;
+      --text-main: #ffffff;
+      --text-sub: #aaaaaa;
+      --accent-red: #ff0000;
+      --pill-bg: rgba(255, 255, 255, 0.2);
+      --pill-active-bg: #ffffff;
+      --pill-active-text: #0f0f0f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      background-color: #000000;
+      color: var(--text-main);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 412px;
+      height: 100vh;
+      background-color: #000000;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Chips Carousel Overlay */
+    .carousel-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+      pointer-events: auto;
+    }
+
+    .sticky-compass {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      padding: 0 8px 0 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .compass-btn {
+      background-color: var(--pill-bg);
+      border-radius: 8px;
+      width: 34px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-right: 12px;
+      scrollbar-width: none;
+    }
+    .category-scroll::-webkit-scrollbar { display: none; }
+
+    .nav-chip {
+      background-color: var(--pill-bg);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+    }
+    .nav-chip.active { background-color: var(--pill-active-bg); color: var(--pill-active-text); }
+    .nav-chip svg { width: 16px; height: 16px; }
+
+    /* Vertical Fullscreen Scroll Viewport */
+    .shorts-viewport {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+    }
+    .shorts-viewport::-webkit-scrollbar { display: none; }
+
+    .short-slide {
+      height: 100vh;
+      width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      background-color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .short-embed-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: auto;
+      transform: scale(1.05);
+    }
+
+    /* Actions Side Bar */
+    .actions-bar {
+      position: absolute;
+      right: 12px;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      z-index: 20;
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .action-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(33, 33, 33, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, fill 0.2s ease;
+    }
+    .action-icon-wrapper svg {
+      width: 22px;
+      height: 22px;
+      fill: #ffffff;
+    }
+
+    /* Active Save Button State */
+    .save-btn.saved .action-icon-wrapper {
+      background: #ffffff;
+    }
+    .save-btn.saved .action-icon-wrapper svg {
+      fill: #0f0f0f;
+    }
+
+    /* Bottom Information Bar */
+    .bottom-info {
+      position: absolute;
+      left: 12px;
+      bottom: 24px;
+      right: 72px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .bottom-info * { pointer-events: auto; }
+
+    .creator-profile { display: flex; align-items: center; gap: 10px; }
+    .creator-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .creator-handle { font-size: 14px; font-weight: 600; color: #ffffff; }
+
+    .subscribe-btn {
+      background-color: var(--accent-red);
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .short-caption {
+      font-size: 13px;
+      line-height: 1.35;
+      color: #ffffff;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="carousel-container">
+      <div class="category-scroll">
+        <div class="sticky-compass">
+          <div class="compass-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          </div>
+        </div>
+        <a href="index.html" class="nav-chip">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="shorts.html" class="nav-chip active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
+          <span>Shorts</span>
+        </a>
+        <a href="map.html" class="nav-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span>Map</span>
+        </a>
+        <a href="savedvideo.html" class="nav-chip">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>
+          <span>Playlists</span>
+        </a>
+        <a href="history.html" class="nav-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>History</span>
+        </a>
+      </div>
+    </div>
+
+    <main class="shorts-viewport" id="shortsViewport"></main>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    // --- IndexedDB Setup ---
+    const DB_NAME = 'ShortsAppDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'saved_shorts';
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function saveShortToDB(item) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.put({ ...item, savedAt: Date.now() });
+        req.onsuccess = () => resolve();
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function removeShortFromDB(id) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => resolve();
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function isShortSaved(id) {
+      const db = await openDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.get(id);
+        req.onsuccess = () => resolve(!!req.result);
+        req.onerror = () => resolve(false);
+      });
+    }
+
+    // --- DOM Scripting ---
+    document.addEventListener("DOMContentLoaded", async () => {
+      const viewport = document.getElementById('shortsViewport');
+      let shortsList = mediaData.filter(item => item.type === 'shorts');
+
+      // Helper function to dynamically parse video ID from URL string
+      function getEmbedUrlFromUrl(urlString) {
+        const parts = urlString.split('/');
+        const rawId = parts[parts.length - 1].replace('watch?v=', '');
+        return `https://www.youtube.com/embed/${rawId}?autoplay=1&mute=1&loop=1&playlist=${rawId}&controls=0&modestbranding=1&rel=0`;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id');
+
+      if (targetId) {
+        const targetIndex = shortsList.findIndex(item => item.id === targetId);
+        if (targetIndex > -1) {
+          const targetedItem = shortsList.splice(targetIndex, 1)[0];
+          shortsList.unshift(targetedItem);
+        }
+      }
+
+      function createShortSlide(item) {
+        const slide = document.createElement('section');
+        slide.className = 'short-slide';
+        slide.setAttribute('data-id', item.id);
+
+        slide.innerHTML = `
+          <iframe 
+            class="short-embed-frame" 
+            src="${getEmbedUrlFromUrl(item.url)}" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+          
+          <aside class="actions-bar">
+            <button class="action-btn">
+              <div class="action-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+              </div>
+              <span>Like</span>
+            </button>
+            <button class="action-btn save-btn" data-id="${item.id}">
+              <div class="action-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+              <span class="save-text">Save</span>
+            </button>
+            <a href="${item.url}" target="_blank" class="action-btn">
+              <div class="action-icon-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M14 9v-4l7 7-7 7v-4.1c-5 0-8.5 1.6-11 5.1 1-5 4-10 11-11z"/></svg>
+              </div>
+              <span>Open</span>
+            </a>
+          </aside>
+
+          <div class="bottom-info">
+            <div class="creator-profile">
+              <div class="creator-avatar" style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"></div>
+              <span class="creator-handle">${item.creator}</span>
+              <button class="subscribe-btn">Subscribe</button>
+            </div>
+            <p class="short-caption">${item.title}</p>
+          </div>
+        `;
+
+        // Handle Save Button click & initial state check
+        const saveBtn = slide.querySelector('.save-btn');
+        const saveText = saveBtn.querySelector('.save-text');
+
+        isShortSaved(item.id).then(saved => {
+          if (saved) {
+            saveBtn.classList.add('saved');
+            saveText.textContent = 'Saved';
+          }
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const currentlySaved = saveBtn.classList.contains('saved');
+          if (currentlySaved) {
+            await removeShortFromDB(item.id);
+            saveBtn.classList.remove('saved');
+            saveText.textContent = 'Save';
+          } else {
+            await saveShortToDB(item);
+            saveBtn.classList.add('saved');
+            saveText.textContent = 'Saved';
+          }
+        });
+
+        return slide;
+      }
+
+      const viewObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('data-id');
+            if (id && typeof logInteraction === 'function') {
+              logInteraction(id, 'view');
+            }
+          }
+        });
+      }, { threshold: 0.6 });
+
+      shortsList.forEach(item => {
+        const slideEl = createShortSlide(item);
+        viewport.appendChild(slideEl);
+        viewObserver.observe(slideEl);
+      });
+    });
+  </script>
+</body>
+</html>
