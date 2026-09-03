@@ -11,5 +11,18 @@ const posts = [
     link: "welcome.html",
     plan: "PREMIUM",
     expires: "2026-09-20"
+  },
+  {
+    id: 4,
+    title: "Vhj",
+    topic: "Hj",
+    type: "",
+    subtype: "",
+    lat: 6,
+    lng: 9,
+    image: "https://github.com/Gitoldor/67",
+    link: "https://github.com/Gitoldor/67",
+    plan: "FREE",
+    expires: "2026-09-05"
   }
 ];
