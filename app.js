@@ -10,7 +10,7 @@ const posts = [
     image: "https://i.ibb.co/chqGP3bQ/SAWANT-WADI-20260831-173946-0000.png",
     link: "welcome.html",
     plan: "FREE",
-    expires: "2026-09-10"
+    expires: "2026-09-02"
   },
 {
     id: 3,
