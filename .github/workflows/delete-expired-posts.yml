@@ -1,0 +1,140 @@
+name: Delete Expired Posts
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  delete-expired-posts:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Delete expired posts
+        run: |
+          node <<'EOF'
+
+          const fs = require("fs");
+
+          const file = "app.js";
+
+          let content = fs.readFileSync(file, "utf8");
+
+          const now = new Date();
+
+          const postRegex = /(\{\s*id\s*:\s*[\s\S]*?\n\s*\})/g;
+
+          const posts = content.match(postRegex);
+
+          if (!posts) {
+            console.log("No posts found.");
+            process.exit(0);
+          }
+
+          let deleted = 0;
+
+          const remainingPosts = posts.filter(post => {
+
+            const match = post.match(
+              /expires\s*:\s*["'](\d{4}-\d{2}-\d{2})["']/
+            );
+
+            // No expiry date = keep the post
+            if (!match) {
+              return true;
+            }
+
+            const expiryDate = new Date(
+              match[1] + "T00:00:00Z"
+            );
+
+            if (expiryDate <= now) {
+
+              const idMatch = post.match(
+                /id\s*:\s*(\d+)/
+              );
+
+              const id = idMatch
+                ? idMatch[1]
+                : "unknown";
+
+              console.log(
+                `Deleting expired post ID ${id}`
+              );
+
+              deleted++;
+
+              return false;
+            }
+
+            return true;
+          });
+
+          if (deleted === 0) {
+            console.log("No expired posts.");
+            process.exit(0);
+          }
+
+          const newContent =
+            content.replace(
+              postRegex,
+              () => ""
+            );
+
+          // Rebuild posts array cleanly
+          const header =
+            content.substring(
+              0,
+              content.indexOf("[") + 1
+            );
+
+          const footer =
+            content.substring(
+              content.lastIndexOf("]")
+            );
+
+          const finalContent =
+            header +
+            "\n" +
+            remainingPosts.join(",\n") +
+            "\n" +
+            footer;
+
+          fs.writeFileSync(
+            file,
+            finalContent,
+            "utf8"
+          );
+
+          console.log(
+            `Deleted ${deleted} expired post(s).`
+          );
+
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add app.js
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Delete expired posts"
+            git push
+          fi
