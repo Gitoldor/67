@@ -24,5 +24,18 @@ const posts = [
     link: "https://github.com/Gitoldor/67",
     plan: "FREE",
     expires: "2026-09-05"
+  },
+  {
+    id: 5,
+    title: "You",
+    topic: "Hu",
+    type: "",
+    subtype: "",
+    lat: 36,
+    lng: 6,
+    image: "https://www.instagram.com/p/Dbq-QnUj3C7/?igsi=NmNvcXN5NXNwbWNp",
+    link: "https://www.instagram.com/p/Dbq-QnUj3C7/?igsi=NmNvcXN5NXNwbWNp",
+    plan: "PRO",
+    expires: "2026-09-04"
   }
 ];
