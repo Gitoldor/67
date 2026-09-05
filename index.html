@@ -8,22 +8,21 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "yd2f29lf1m");
   </script>
+
   <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="My App">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-<meta name="mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<meta name="apple-mobile-web-app-title" content="My App">
-
-<link rel="apple-touch-icon" href="icons/icon-192.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>YouTube Mobile Shell</title>
+
   <style>
     :root {
       --bg-color: #0f0f0f;
@@ -36,8 +35,20 @@
       --pill-active-text: #0f0f0f;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
-    body { background-color: #000000; color: var(--text-main); display: flex; justify-content: center; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: #000000;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+    }
 
     .app-container {
       width: 100%;
@@ -60,7 +71,17 @@
       z-index: 20;
     }
 
-    .brand { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 18px; cursor: pointer; text-decoration: none; color: inherit; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
     .brand-icon {
       width: 28px;
       height: 20px;
@@ -70,19 +91,80 @@
       align-items: center;
       justify-content: center;
     }
-    .brand-icon::after { content: ''; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 9px solid white; margin-left: 1px; }
 
-    .header-actions { display: flex; align-items: center; gap: 16px; }
-    .notification-badge { position: relative; cursor: pointer; }
-    .badge { position: absolute; top: -4px; right: -6px; background-color: var(--accent-red); color: white; font-size: 10px; font-weight: bold; padding: 1px 4px; border-radius: 8px; }
+    .brand-icon::after {
+      content: '';
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 9px solid white;
+      margin-left: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .notification-badge {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      background-color: var(--accent-red);
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 1px 4px;
+      border-radius: 8px;
+    }
 
     /* Filter & Navigation Chips Carousel */
-    .carousel-container { position: relative; display: flex; align-items: center; background-color: var(--bg-color); padding: 6px 0; }
-    .sticky-compass { position: sticky; left: 0; z-index: 10; background-color: var(--bg-color); padding: 0 8px 0 12px; display: flex; align-items: center; }
-    .compass-btn { background-color: var(--pill-bg); border-radius: 8px; width: 34px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-    .category-scroll { display: flex; gap: 8px; overflow-x: auto; padding-right: 12px; scrollbar-width: none; }
-    .category-scroll::-webkit-scrollbar { display: none; }
+    .carousel-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-color: var(--bg-color);
+      padding: 6px 0;
+    }
+
+    .sticky-compass {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      background-color: var(--bg-color);
+      padding: 0 8px 0 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .compass-btn {
+      background-color: var(--pill-bg);
+      border-radius: 8px;
+      width: 34px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-right: 12px;
+      scrollbar-width: none;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
     .nav-chip {
       background-color: var(--pill-bg);
@@ -99,15 +181,45 @@
       flex-shrink: 0;
       text-decoration: none;
     }
-    .nav-chip.active { background-color: var(--pill-active-bg); color: var(--pill-active-text); }
-    .nav-chip svg { width: 16px; height: 16px; }
 
-    .feed { flex: 1; overflow-y: auto; padding: 8px 12px; scrollbar-width: none; }
-    .feed::-webkit-scrollbar { display: none; }
+    .nav-chip.active {
+      background-color: var(--pill-active-bg);
+      color: var(--pill-active-text);
+    }
+
+    .nav-chip svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px;
+      scrollbar-width: none;
+    }
+
+    .feed::-webkit-scrollbar {
+      display: none;
+    }
 
     /* Shorts Grid Layout */
-    .shorts-section-title { font-size: 16px; font-weight: 700; margin: 12px 0 8px 0; display: flex; align-items: center; gap: 6px; }
-    .shorts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+
+    .shorts-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 12px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shorts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
 
     .short-card {
       position: relative;
@@ -124,14 +236,55 @@
       text-decoration: none;
       cursor: pointer;
     }
-    .short-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%); }
-    .card-bottom { position: relative; z-index: 1; font-size: 12px; font-weight: 600; color: white; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .short-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0) 40%,
+        rgba(0,0,0,0.85) 100%
+      );
+    }
+
+    .card-bottom {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
     /* Long-Form Video Card Layout */
-    .video-card { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; text-decoration: none; color: inherit; cursor: pointer; }
-    .video-thumbnail-box { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background-size: cover; background-position: center; }
-    
+
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .video-thumbnail-box {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
     /* Save Bookmark Button */
+
     .save-btn {
       position: absolute;
       top: 8px;
@@ -150,368 +303,1005 @@
       z-index: 5;
       transition: background 0.2s, transform 0.15s;
     }
-    .save-btn:active { transform: scale(0.9); }
-    .save-btn.saved { background: var(--text-main); color: var(--bg-color); }
 
-    .video-meta { display: flex; gap: 10px; }
-    .channel-avatar { width: 36px; height: 36px; border-radius: 50%; background-size: cover; background-position: center; flex-shrink: 0; }
-    .video-details { display: flex; flex-direction: column; }
-    .video-title { font-size: 14px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .video-subtext { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+    .save-btn:active {
+      transform: scale(0.9);
+    }
 
-    .sentinel { height: 40px; width: 100%; }
+    .save-btn.saved {
+      background: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    .video-meta {
+      display: flex;
+      gap: 10px;
+    }
+
+    .channel-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+
+    .video-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-subtext {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .sentinel {
+      height: 40px;
+      width: 100%;
+    }
   </style>
 </head>
+
 <body>
+
   <div class="app-container">
+
     <header class="header">
-      <a href="home.html" class="brand">
+
+      <a href="index.html" class="brand">
         <div class="brand-icon"></div>
         <span>YouTube</span>
       </a>
+
       <div class="header-actions">
+
         <div class="notification-badge">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+
           <span class="badge">3</span>
         </div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+
       </div>
+
     </header>
 
-    <!-- Filter & Navigation Chips Integrated Carousel -->
+
     <div class="carousel-container">
+
       <div class="category-scroll">
+
         <div class="sticky-compass">
           <div class="compass-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+
           </div>
         </div>
 
+
         <a href="index.html" class="nav-chip active">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+
           <span>Home</span>
+
         </a>
+
 
         <a href="shorts.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
-          <span>Shorts</span>
-        </a>
 
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/>
+          </svg>
+
+          <span>Shorts</span>
+
+        </a>
 
 
         <a href="savedvideo.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>
+
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/>
+          </svg>
+
           <span>Playlists</span>
+
         </a>
+
 
         <a href="history.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+
           <span>History</span>
+
         </a>
+
       </div>
+
     </div>
 
+
     <main class="feed" id="main-feed">
+
       <div id="sentinel" class="sentinel"></div>
+
     </main>
+
   </div>
 
+
   <script src="data.js"></script>
+
+
   <script>
-    // Database connection helper
-    function getDB() {
+
+    function getAnalyticsDB() {
+
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("AnalyticsDB", 2);
+
+        const request = indexedDB.open("AnalyticsDB", 3);
+
         request.onupgradeneeded = (e) => {
+
           const db = e.target.result;
+
           if (!db.objectStoreNames.contains("interactions")) {
-            db.createObjectStore("interactions", { keyPath: "id", autoIncrement: true });
+
+            db.createObjectStore(
+              "interactions",
+              {
+                keyPath: "id",
+                autoIncrement: true
+              }
+            );
+
           }
+
           if (!db.objectStoreNames.contains("bookmarks")) {
-            db.createObjectStore("bookmarks", { keyPath: "mediaId" });
+
+            db.createObjectStore(
+              "bookmarks",
+              {
+                keyPath: "mediaId"
+              }
+            );
+
           }
+
         };
+
         request.onsuccess = (e) => resolve(e.target.result);
+
         request.onerror = (e) => reject(e.target.error);
+
       });
+
     }
 
-    // Log interaction to IndexedDB
+
     async function logInteraction(mediaId, type) {
+
       try {
-        const db = await getDB();
-        const tx = db.transaction("interactions", "readwrite");
-        const store = tx.objectStore("interactions");
-        store.add({
+
+        const db = await getAnalyticsDB();
+
+        const tx = db.transaction(
+          "interactions",
+          "readwrite"
+        );
+
+        tx.objectStore("interactions").add({
+
           mediaId: mediaId,
-          type: type, // 'click' or 'view'
+          type: type,
           timestamp: new Date().toISOString()
+
         });
+
       } catch (err) {
-        console.error("Interaction logging failed", err);
+
+        console.error(
+          "Failed to log interaction",
+          err
+        );
+
       }
+
     }
 
-    // Toggle and save bookmark in IndexedDB
-    async function toggleSave(id) {
+
+    async function toggleBookmarkInDB(mediaId) {
+
       try {
-        const db = await getDB();
-        const tx = db.transaction("bookmarks", "readwrite");
+
+        const db = await getAnalyticsDB();
+
+        const tx = db.transaction(
+          "bookmarks",
+          "readwrite"
+        );
+
         const store = tx.objectStore("bookmarks");
-        
-        const getReq = store.get(id);
-        getReq.onsuccess = () => {
-          let isSaved = false;
-          if (getReq.result) {
-            store.delete(id);
-            isSaved = false;
-          } else {
-            store.put({ mediaId: id, savedAt: new Date().toISOString() });
-            isSaved = true;
-          }
-          updateBookmarkUI(id, isSaved);
-        };
-      } catch (err) {
-        console.error("Failed to update bookmark", err);
-      }
-    }
 
-    // Check saved state from IndexedDB
-    async function checkIsSaved(id) {
-      try {
-        const db = await getDB();
         return new Promise((resolve) => {
-          const tx = db.transaction("bookmarks", "readonly");
-          const store = tx.objectStore("bookmarks");
-          const getReq = store.get(id);
-          getReq.onsuccess = () => resolve(!!getReq.result);
-          getReq.onerror = () => resolve(false);
+
+          const checkReq = store.get(mediaId);
+
+          checkReq.onsuccess = () => {
+
+            if (checkReq.result) {
+
+              store.delete(mediaId);
+
+              logInteraction(
+                mediaId,
+                'bookmark_removed'
+              );
+
+              resolve(false);
+
+            } else {
+
+              store.put({
+
+                mediaId: mediaId,
+                timestamp: new Date().toISOString()
+
+              });
+
+              logInteraction(
+                mediaId,
+                'bookmark_added'
+              );
+
+              resolve(true);
+
+            }
+
+          };
+
         });
+
       } catch (err) {
+
+        console.error(
+          "Failed to update bookmark",
+          err
+        );
+
         return false;
+
       }
+
     }
 
-    function updateBookmarkUI(id, isSaved) {
-      const btn = document.querySelector(`.save-btn[data-id="${id}"]`);
-      if (btn) {
-        btn.classList.toggle('saved', isSaved);
-        btn.querySelector('svg').setAttribute('fill', isSaved ? 'currentColor' : 'none');
+
+    async function getSavedBookmarks() {
+
+      try {
+
+        const db = await getAnalyticsDB();
+
+        return new Promise((resolve) => {
+
+          const tx = db.transaction(
+            "bookmarks",
+            "readonly"
+          );
+
+          const store = tx.objectStore("bookmarks");
+
+          const getAll = store.getAll();
+
+          getAll.onsuccess = () => {
+
+            resolve(
+              (getAll.result || [])
+                .map(b => b.mediaId)
+            );
+
+          };
+
+          getAll.onerror = () => resolve([]);
+
+        });
+
+      } catch (err) {
+
+        return [];
+
       }
+
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const mainFeed = document.getElementById("main-feed");
-      const sentinel = document.getElementById("sentinel");
 
-      // Extract collections safely from data.js
-      const videos = mediaData.filter(item => item.type === "video");
-      const shorts = mediaData.filter(item => item.type === "shorts");
+    function getThumbnailFromUrl(urlString) {
 
-      let videoIndex = 0;
-      let shortsIndex = 0;
-      let sequenceStep = 0;
-      let isLoading = false;
-
-      function getThumbnailFromUrl(urlString) {
-        if (!urlString) return 'https://picsum.photos/400/225';
-        const parts = urlString.split('/');
-        const rawId = parts[parts.length - 1].replace('watch?v=', '');
-        return `https://img.youtube.com/vi/${rawId}/hqdefault.jpg`;
+      if (!urlString) {
+        return 'https://picsum.photos/400/225';
       }
 
-      function createVideoCard(item) {
-        const card = document.createElement('a');
-        card.href = item.url || '#';
-        card.className = 'video-card';
-        card.setAttribute('data-id', item.id);
+      let videoId = '';
 
-        card.innerHTML = `
-          <div class="video-thumbnail-box" style="background-image: url('${getThumbnailFromUrl(item.url)}')">
-            <button class="save-btn" data-id="${item.id}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="video-meta">
-            <div class="channel-avatar" style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"></div>
-            <div class="video-details">
-              <span class="video-title">${item.title}</span>
-              <span class="video-subtext">${item.creator} • 5.6 lakh views • 1 day ago</span>
+      if (urlString.includes('/shorts/')) {
+
+        videoId =
+          urlString
+            .split('/shorts/')[1];
+
+      } else if (urlString.includes('v=')) {
+
+        videoId =
+          urlString
+            .split('v=')[1]
+            .split('&')[0];
+
+      } else {
+
+        videoId =
+          urlString
+            .split('/')
+            .pop();
+
+      }
+
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+    }
+
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      async () => {
+
+        const mainFeed =
+          document.getElementById("main-feed");
+
+        const sentinel =
+          document.getElementById("sentinel");
+
+
+        const dataset =
+          (
+            typeof mediaData !== 'undefined' &&
+            Array.isArray(mediaData)
+          )
+            ? mediaData
+            : [];
+
+
+        const savedIds =
+          new Set(
+            await getSavedBookmarks()
+          );
+
+
+        const videos =
+          dataset.filter(
+            item => item.type === 'video'
+          );
+
+
+        const shorts =
+          dataset.filter(
+            item => item.type === 'shorts'
+          );
+
+
+        let videoIndex = 0;
+
+        let shortsIndex = 0;
+
+        let stage = 0;
+
+        let isLoading = false;
+
+
+        /*
+        ========================================================
+        VIDEO CARD
+        ========================================================
+        */
+
+        function createVideoCard(item) {
+
+          const card =
+            document.createElement('a');
+
+
+          /*
+          IMPORTANT:
+
+          item.href = where the card goes.
+
+          item.url = still used for the
+          YouTube thumbnail below.
+          */
+
+          card.href =
+            item.href ||
+            item.url ||
+            '#';
+
+
+          card.className =
+            'video-card';
+
+
+          card.setAttribute(
+            'data-id',
+            item.id
+          );
+
+
+          const isSaved =
+            savedIds.has(item.id);
+
+
+          card.innerHTML = `
+
+            <div
+              class="video-thumbnail-box"
+              style="background-image: url('${getThumbnailFromUrl(item.url)}')"
+            >
+
+              <button
+                class="save-btn ${isSaved ? 'saved' : ''}"
+                data-id="${item.id}"
+              >
+
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="${isSaved ? 'currentColor' : 'none'}"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+
+                </svg>
+
+              </button>
+
             </div>
-          </div>
-        `;
 
-        // Load bookmark state asynchronously from IndexedDB
-        checkIsSaved(item.id).then(isSaved => {
-          updateBookmarkUI(item.id, isSaved);
-        });
 
-        // Click interaction logging
-        card.addEventListener('click', (e) => {
-          if (e.target.closest('.save-btn')) return;
-          logInteraction(item.id, 'click');
-        });
+            <div class="video-meta">
 
-        // Bookmark handle logic with long-press targeting savedvideo.html
-        const saveBtn = card.querySelector('.save-btn');
-        let timer = null;
-        let isLongPress = false;
+              <div
+                class="channel-avatar"
+                style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"
+              ></div>
 
-        const startPress = (e) => {
-          e.stopPropagation();
-          isLongPress = false;
-          timer = setTimeout(() => {
-            isLongPress = true;
-            window.location.href = "savedvideo.html";
-          }, 500);
-        };
 
-        const cancelPress = (e) => {
-          e.stopPropagation();
-          if (timer) clearTimeout(timer);
-        };
+              <div class="video-details">
 
-        saveBtn.addEventListener('mousedown', startPress);
-        saveBtn.addEventListener('touchstart', startPress, { passive: true });
-        saveBtn.addEventListener('mouseup', cancelPress);
-        saveBtn.addEventListener('mouseleave', cancelPress);
-        saveBtn.addEventListener('touchend', cancelPress);
+                <span class="video-title">
+                  ${item.title}
+                </span>
 
-        saveBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          if (!isLongPress) {
-            toggleSave(item.id);
-          }
-        });
+                <span class="video-subtext">
+                  ${item.creator || 'Creator'} • 12K views • 2 days ago
+                </span>
 
-        return card;
-      }
+              </div>
 
-      function createShortsGridSection(shortsChunk) {
-        const section = document.createElement('div');
-        
-        let sectionHeader = `
-          <div class="shorts-section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF0000"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
-            <span>Shorts</span>
-          </div>
-        `;
+            </div>
 
-        const grid = document.createElement('div');
-        grid.className = 'shorts-grid';
+          `;
 
-        shortsChunk.forEach(item => {
-          const shortCard = document.createElement('a');
-          shortCard.href = `shorts.html?id=${item.id}`;
-          shortCard.className = 'short-card';
-          shortCard.setAttribute('data-id', item.id);
-          shortCard.style.backgroundImage = `url('${getThumbnailFromUrl(item.url)}')`;
-          shortCard.innerHTML = `<div class="card-bottom">${item.title}</div>`;
 
-          shortCard.addEventListener('click', () => {
-            logInteraction(item.id, 'click');
-          });
+          card.addEventListener(
+            'click',
+            (e) => {
 
-          grid.appendChild(shortCard);
-        });
+              if (
+                e.target.closest('.save-btn')
+              ) {
+                return;
+              }
 
-        section.innerHTML = sectionHeader;
-        section.appendChild(grid);
-        return section;
-      }
+              logInteraction(
+                item.id,
+                'click'
+              );
 
-      // IndexedDB View Logging Intersection Observer
-      const viewObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute('data-id');
-            if (id) logInteraction(id, 'view');
-          }
-        });
-      }, { threshold: 0.5 });
+            }
+          );
 
-      function loadNextFeedBatch() {
-        if (isLoading) return;
-        isLoading = true;
 
-        let addedNodes = [];
+          const saveBtn =
+            card.querySelector('.save-btn');
 
-        // Loop through sequence step logic
-        if (sequenceStep === 0) {
-          // Add first batch of videos (e.g., 2 videos)
-          const firstBatch = videos.slice(videoIndex, videoIndex + 2);
-          firstBatch.forEach(v => {
-            const node = createVideoCard(v);
-            mainFeed.insertBefore(node, sentinel);
-            addedNodes.push(node);
-          });
-          videoIndex += firstBatch.length;
-          sequenceStep = 1;
-        } else if (sequenceStep === 1 || sequenceStep === 3) {
-          // Render Shorts Section
-          const chunk = shorts.slice(shortsIndex, shortsIndex + 6);
-          if (chunk.length > 0) {
-            const gridNode = createShortsGridSection(chunk);
-            mainFeed.insertBefore(gridNode, sentinel);
-            gridNode.querySelectorAll('.short-card').forEach(sc => viewObserver.observe(sc));
-            shortsIndex += chunk.length;
-          }
-          sequenceStep = 2;
-        } else if (sequenceStep === 2) {
-          // Render next batch of long form videos
-          const nextVideos = videos.slice(videoIndex, videoIndex + 5);
-          nextVideos.forEach(v => {
-            const node = createVideoCard(v);
-            mainFeed.insertBefore(node, sentinel);
-            addedNodes.push(node);
-          });
-          videoIndex += nextVideos.length;
-          sequenceStep = 3;
+
+          saveBtn.addEventListener(
+            'click',
+            async (e) => {
+
+              e.preventDefault();
+
+              e.stopPropagation();
+
+
+              const activeState =
+                await toggleBookmarkInDB(
+                  item.id
+                );
+
+
+              saveBtn.classList.toggle(
+                'saved',
+                activeState
+              );
+
+
+              saveBtn
+                .querySelector('svg')
+                .setAttribute(
+                  'fill',
+                  activeState
+                    ? 'currentColor'
+                    : 'none'
+                );
+
+
+              if (activeState) {
+
+                savedIds.add(
+                  item.id
+                );
+
+              } else {
+
+                savedIds.delete(
+                  item.id
+                );
+
+              }
+
+            }
+          );
+
+
+          return card;
+
         }
 
-        addedNodes.forEach(node => viewObserver.observe(node));
-        isLoading = false;
-      }
 
-      // Dynamic Virtual Infinite Loader
-      const sentinelObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !isLoading) {
-          loadNextFeedBatch();
+        /*
+        ========================================================
+        SHORTS
+        ========================================================
+        */
+
+        function createShortsGridSection(
+          shortsChunk
+        ) {
+
+          const section =
+            document.createElement('div');
+
+
+          const sectionHeader = `
+
+            <div class="shorts-section-title">
+
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="#FF0000"
+              >
+
+                <path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/>
+
+              </svg>
+
+              <span>Shorts</span>
+
+            </div>
+
+          `;
+
+
+          const grid =
+            document.createElement('div');
+
+
+          grid.className =
+            'shorts-grid';
+
+
+          shortsChunk.forEach(
+            item => {
+
+              const shortCard =
+                document.createElement('a');
+
+
+              /*
+              Shorts continue to use
+              shorts2.html?id=...
+              */
+
+              shortCard.href =
+                `shorts2.html?id=${item.id}`;
+
+
+              shortCard.className =
+                'short-card';
+
+
+                            /*
+              Shorts continue to use
+              shorts2.html?id=...
+              */
+
+              shortCard.href =
+                `shorts2.html?id=${item.id}`;
+
+
+              shortCard.className =
+                'short-card';
+
+
+              shortCard.setAttribute(
+                'data-id',
+                item.id
+              );
+
+
+              shortCard.style.backgroundImage =
+                `url('${getThumbnailFromUrl(item.url)}')`;
+
+
+              shortCard.innerHTML =
+                `<div class="card-bottom">${item.title}</div>`;
+
+
+              shortCard.addEventListener(
+                'click',
+                () => {
+
+                  logInteraction(
+                    item.id,
+                    'click'
+                  );
+
+                }
+              );
+
+
+              grid.appendChild(
+                shortCard
+              );
+
+            }
+          );
+
+
+          section.innerHTML =
+            sectionHeader;
+
+
+          section.appendChild(
+            grid
+          );
+
+
+          return section;
+
         }
-      }, { 
-        root: mainFeed,
-        rootMargin: '300px' 
-      });
 
-      sentinelObserver.observe(sentinel);
 
-      // Trigger initial batch loads until feed has scroll height
-      function fillScreen() {
-        if (mainFeed.scrollHeight <= mainFeed.clientHeight && (videoIndex < videos.length || shortsIndex < shorts.length)) {
-          loadNextFeedBatch();
-          setTimeout(fillScreen, 50);
+        /*
+        ========================================================
+        VIEW TRACKING
+        ========================================================
+        */
+
+        const viewObserver =
+          new IntersectionObserver(
+            (entries) => {
+
+              entries.forEach(
+                entry => {
+
+                  if (
+                    entry.isIntersecting
+                  ) {
+
+                    const id =
+                      entry.target
+                        .getAttribute(
+                          'data-id'
+                        );
+
+
+                    if (id) {
+
+                      logInteraction(
+                        id,
+                        'view'
+                      );
+
+                    }
+
+                  }
+
+                }
+              );
+
+            },
+            {
+              threshold: 0.5
+            }
+          );
+
+
+        /*
+        ========================================================
+        INFINITE FEED
+        ========================================================
+        */
+
+        function loadNextBatch() {
+
+          if (isLoading) {
+            return;
+          }
+
+
+          if (
+            videoIndex >= videos.length &&
+            shortsIndex >= shorts.length
+          ) {
+
+            sentinelObserver.disconnect();
+
+            sentinel.remove();
+
+            return;
+
+          }
+
+
+          isLoading = true;
+
+
+          if (stage === 0) {
+
+            if (
+              videoIndex < videos.length
+            ) {
+
+              const v =
+                videos[videoIndex++];
+
+
+              const node =
+                createVideoCard(v);
+
+
+              mainFeed.insertBefore(
+                node,
+                sentinel
+              );
+
+
+              viewObserver.observe(
+                node
+              );
+
+            }
+
+
+            stage = 1;
+
+          }
+
+
+          else if (stage === 1) {
+
+            const chunk =
+              shorts.slice(
+                shortsIndex,
+                shortsIndex + 6
+              );
+
+
+            if (chunk.length > 0) {
+
+              shortsIndex +=
+                chunk.length;
+
+
+              const gridNode =
+                createShortsGridSection(
+                  chunk
+                );
+
+
+              mainFeed.insertBefore(
+                gridNode,
+                sentinel
+              );
+
+
+              gridNode
+                .querySelectorAll(
+                  '.short-card'
+                )
+                .forEach(
+                  sc =>
+                    viewObserver.observe(sc)
+                );
+
+            }
+
+
+            stage = 2;
+
+          }
+
+
+          else if (stage === 2) {
+
+            const chunk =
+              videos.slice(
+                videoIndex,
+                videoIndex + 4
+              );
+
+
+            if (chunk.length > 0) {
+
+              videoIndex +=
+                chunk.length;
+
+
+              chunk.forEach(
+                v => {
+
+                  const node =
+                    createVideoCard(v);
+
+
+                  mainFeed.insertBefore(
+                    node,
+                    sentinel
+                  );
+
+
+                  viewObserver.observe(
+                    node
+                  );
+
+                }
+              );
+
+            }
+
+
+            stage = 1;
+
+          }
+
+
+          isLoading = false;
+
         }
+
+
+        /*
+        ========================================================
+        SENTINEL OBSERVER
+        ========================================================
+        */
+
+        const sentinelObserver =
+          new IntersectionObserver(
+            (entries) => {
+
+              if (
+                entries[0].isIntersecting &&
+                !isLoading
+              ) {
+
+                loadNextBatch();
+
+
+                if (
+                  mainFeed.scrollHeight <=
+                  mainFeed.clientHeight + 100
+                ) {
+
+                  loadNextBatch();
+
+                }
+
+              }
+
+            },
+            {
+              root: mainFeed,
+              rootMargin: '150px'
+            }
+          );
+
+
+        sentinelObserver.observe(
+          sentinel
+        );
+
       }
-      
-      loadNextFeedBatch();
-      fillScreen();
-    });
+    );
+
   </script>
-  <script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js")
-            .then(() => {
-                console.log("PWA Service Worker registered");
-            })
-            .catch(error => {
-                console.error("PWA registration failed:", error);
-            });
-    });
-}
-</script>
+
 </body>
 </html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Saved Videos - YouTube Shell</title>
+
   <style>
     :root {
       --bg-color: #0f0f0f;
@@ -16,8 +17,20 @@
       --pill-active-text: #0f0f0f;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
-    body { background-color: #000000; color: var(--text-main); display: flex; justify-content: center; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: #000000;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+    }
 
     .app-container {
       width: 100%;
@@ -40,7 +53,17 @@
       z-index: 20;
     }
 
-    .brand { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 18px; cursor: pointer; text-decoration: none; color: inherit; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
     .brand-icon {
       width: 28px;
       height: 20px;
@@ -50,17 +73,62 @@
       align-items: center;
       justify-content: center;
     }
-    .brand-icon::after { content: ''; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 9px solid white; margin-left: 1px; }
 
-    .header-actions { display: flex; align-items: center; gap: 16px; }
+    .brand-icon::after {
+      content: '';
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 9px solid white;
+      margin-left: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
     /* Filter & Navigation Chips Carousel */
-    .carousel-container { position: relative; display: flex; align-items: center; background-color: var(--bg-color); padding: 6px 0; }
-    .sticky-compass { position: sticky; left: 0; z-index: 10; background-color: var(--bg-color); padding: 0 8px 0 12px; display: flex; align-items: center; }
-    .compass-btn { background-color: var(--pill-bg); border-radius: 8px; width: 34px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .carousel-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-color: var(--bg-color);
+      padding: 6px 0;
+    }
 
-    .category-scroll { display: flex; gap: 8px; overflow-x: auto; padding-right: 12px; scrollbar-width: none; }
-    .category-scroll::-webkit-scrollbar { display: none; }
+    .sticky-compass {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      background-color: var(--bg-color);
+      padding: 0 8px 0 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .compass-btn {
+      background-color: var(--pill-bg);
+      border-radius: 8px;
+      width: 34px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-right: 12px;
+      scrollbar-width: none;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
     .nav-chip {
       background-color: var(--pill-bg);
@@ -77,43 +145,74 @@
       flex-shrink: 0;
       text-decoration: none;
     }
-    .nav-chip.active { background-color: var(--pill-active-bg); color: var(--pill-active-text); }
-    .nav-chip svg { width: 16px; height: 16px; }
 
-    /* Top Side-by-Side Toggle Bar */
-    .top-toggle-bar {
-      display: flex;
-      gap: 10px;
-      padding: 8px 12px;
-      background-color: var(--bg-color);
-      border-bottom: 1px solid #222;
+    .nav-chip.active {
+      background-color: var(--pill-active-bg);
+      color: var(--pill-active-text);
     }
 
-    .filter-btn {
+    .nav-chip svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .feed {
       flex: 1;
-      padding: 8px 12px;
-      background-color: var(--pill-bg);
-      color: var(--text-sub);
-      border: 1px solid transparent;
-      border-radius: 20px;
+      overflow-y: auto;
+      padding: 12px;
+      scrollbar-width: none;
+    }
+
+    .feed::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Section Folders Header */
+    .folder-section {
+      margin-bottom: 24px;
+    }
+
+    .folder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .folder-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-all-btn {
+      background: none;
+      border: none;
+      color: #3ea6ff;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Sub-view Top Header for Full List Display */
+    .subview-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .filter-btn.active {
-      background-color: var(--pill-active-bg);
-      color: var(--pill-active-text);
-      border-color: #ffffff;
+    .back-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
     }
-
-    .feed { flex: 1; overflow-y: auto; padding: 12px; scrollbar-width: none; }
-    .feed::-webkit-scrollbar { display: none; }
 
     /* Empty State */
     .empty-state {
@@ -121,14 +220,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 50vh;
+      padding: 32px 0;
       color: var(--text-sub);
       text-align: center;
-      gap: 12px;
+      gap: 8px;
+      font-size: 13px;
     }
 
-    /* Side-by-Side Shorts Grid Layout */
-    .shorts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    /* 1x2 Grid Layout for Shorts */
+    .shorts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
 
     .short-card {
       position: relative;
@@ -145,13 +249,52 @@
       text-decoration: none;
       cursor: pointer;
     }
-    .short-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%); }
-    .card-bottom { position: relative; z-index: 1; font-size: 12px; font-weight: 600; color: white; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .short-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0) 40%,
+        rgba(0,0,0,0.85) 100%
+      );
+    }
+
+    .card-bottom {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
     /* Long-Form Video Card Layout */
-    .video-card { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; text-decoration: none; color: inherit; cursor: pointer; }
-    .video-thumbnail-box { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background-size: cover; background-position: center; }
-    
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .video-thumbnail-box {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
     /* Save Bookmark Button */
     .save-btn {
       position: absolute;
@@ -171,332 +314,1530 @@
       z-index: 5;
       transition: background 0.2s, transform 0.15s;
     }
-    .save-btn:active { transform: scale(0.9); }
-    .save-btn.saved { background: var(--text-main); color: var(--bg-color); }
 
-    .video-meta { display: flex; gap: 10px; }
-    .channel-avatar { width: 36px; height: 36px; border-radius: 50%; background-size: cover; background-position: center; flex-shrink: 0; }
-    .video-details { display: flex; flex-direction: column; }
-    .video-title { font-size: 14px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .video-subtext { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+    .save-btn:active {
+      transform: scale(0.9);
+    }
+
+    .save-btn.saved {
+      background: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    .video-meta {
+      display: flex;
+      gap: 10px;
+    }
+
+    .channel-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+
+    .video-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-subtext {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
   </style>
 </head>
+
 <body>
+
   <div class="app-container">
+
     <header class="header">
-      <a href="home.html" class="brand">
+
+      <a href="index.html" class="brand">
         <div class="brand-icon"></div>
         <span>YouTube</span>
       </a>
+
       <div class="header-actions">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+
       </div>
+
     </header>
 
-    <!-- Filter & Navigation Chips Carousel -->
+
+    <!-- Navigation Chips Carousel -->
+
     <div class="carousel-container">
+
       <div class="category-scroll">
+
         <div class="sticky-compass">
+
           <div class="compass-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+
           </div>
+
         </div>
+
 
         <a href="index.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+
           <span>Home</span>
+
         </a>
+
 
         <a href="shorts.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/>
+          </svg>
+
           <span>Shorts</span>
+
         </a>
 
-      
 
-        <a href="savedvideo.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>
+        <a href="savedvideo.html" class="nav-chip active">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/>
+          </svg>
+
           <span>Playlists</span>
+
         </a>
+
 
         <a href="history.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+
           <span>History</span>
+
         </a>
+
       </div>
+
     </div>
 
-    <!-- Side-by-Side Top Toggle Buttons -->
-    <div class="top-toggle-bar">
-      <button class="filter-btn active" id="btnShowVideos">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7V9l5 3-5 3z"/></svg>
-        <span>All Videos</span>
-      </button>
-      <button class="filter-btn" id="btnShowShorts">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
-        <span>All Shorts</span>
-      </button>
-    </div>
 
     <main class="feed" id="saved-feed"></main>
+
   </div>
 
+
   <script src="data.js"></script>
+
+
   <script>
+
+    // ============================================================
+    // PRIMARY ANALYTICS DB CONNECTION
+    // ============================================================
+
     function getAnalyticsDB() {
+
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("AnalyticsDB", 2);
+
+        const request = indexedDB.open("AnalyticsDB", 3);
+
         request.onupgradeneeded = (e) => {
+
           const db = e.target.result;
+
           if (!db.objectStoreNames.contains("interactions")) {
-            db.createObjectStore("interactions", { keyPath: "id", autoIncrement: true });
+
+            db.createObjectStore(
+              "interactions",
+              {
+                keyPath: "id",
+                autoIncrement: true
+              }
+            );
+
           }
+
           if (!db.objectStoreNames.contains("bookmarks")) {
-            db.createObjectStore("bookmarks", { keyPath: "mediaId" });
+
+            db.createObjectStore(
+              "bookmarks",
+              {
+                keyPath: "mediaId"
+              }
+            );
+
           }
+
         };
+
         request.onsuccess = (e) => resolve(e.target.result);
+
         request.onerror = (e) => reject(e.target.error);
+
       });
+
     }
+
+
+    // ============================================================
+    // SECONDARY SHORTS APP DB CONNECTION
+    // ============================================================
 
     function getShortsDB() {
+
       return new Promise((resolve, reject) => {
+
         const request = indexedDB.open("ShortsAppDB", 1);
+
         request.onupgradeneeded = (e) => {
+
           const db = e.target.result;
+
           if (!db.objectStoreNames.contains("saved_shorts")) {
-            db.createObjectStore("saved_shorts", { keyPath: "id" });
+
+            db.createObjectStore(
+              "saved_shorts",
+              {
+                keyPath: "id"
+              }
+            );
+
           }
+
         };
+
         request.onsuccess = (e) => resolve(e.target.result);
+
         request.onerror = (e) => reject(e.target.error);
+
       });
+
     }
 
-    async function fetchVideoBookmarks() {
+
+    // ============================================================
+    // RETRIEVE SAVED BOOKMARKS FROM ANALYTICS DB
+    // ============================================================
+
+    async function fetchAnalyticsBookmarks() {
+
       try {
+
         const db = await getAnalyticsDB();
+
         return new Promise((resolve) => {
-          const tx = db.transaction("bookmarks", "readonly");
+
+          const tx = db.transaction(
+            "bookmarks",
+            "readonly"
+          );
+
           const store = tx.objectStore("bookmarks");
+
           const getAll = store.getAll();
-          getAll.onsuccess = () => resolve((getAll.result || []).map(b => b.mediaId));
-          getAll.onerror = () => resolve([]);
+
+          getAll.onsuccess = () => {
+
+            resolve(
+              getAll.result || []
+            );
+
+          };
+
+          getAll.onerror = () => {
+
+            resolve([]);
+
+          };
+
         });
+
       } catch (err) {
+
         return [];
+
       }
+
     }
 
-    async function fetchShortsBookmarks() {
+
+    // ============================================================
+    // RETRIEVE SAVED SHORTS
+    // ============================================================
+
+    async function fetchShortsBookmarksDB() {
+
       try {
+
         const db = await getShortsDB();
+
         return new Promise((resolve) => {
-          const tx = db.transaction("saved_shorts", "readonly");
-          const store = tx.objectStore("saved_shorts");
+
+          const tx = db.transaction(
+            "saved_shorts",
+            "readonly"
+          );
+
+          const store = tx.objectStore(
+            "saved_shorts"
+          );
+
           const getAll = store.getAll();
-          getAll.onsuccess = () => resolve(getAll.result || []);
-          getAll.onerror = () => resolve([]);
+
+          getAll.onsuccess = () => {
+
+            resolve(
+              getAll.result || []
+            );
+
+          };
+
+          getAll.onerror = () => {
+
+            resolve([]);
+
+          };
+
         });
+
       } catch (err) {
+
         return [];
+
       }
+
     }
 
-    async function removeVideoSave(id, cardElement) {
+
+    // ============================================================
+    // REMOVE SAVED BOOKMARK
+    // ============================================================
+
+    async function removeSaveDB(id) {
+
       try {
-        const db = await getAnalyticsDB();
-        const tx = db.transaction("bookmarks", "readwrite");
-        const store = tx.objectStore("bookmarks");
-        store.delete(id);
-        cardElement.remove();
-        checkEmptyFeed();
+
+        const dbAnalytics =
+          await getAnalyticsDB();
+
+        const txA =
+          dbAnalytics.transaction(
+            "bookmarks",
+            "readwrite"
+          );
+
+        txA
+          .objectStore("bookmarks")
+          .delete(id);
+
+
+        const dbShorts =
+          await getShortsDB();
+
+        const txS =
+          dbShorts.transaction(
+            "saved_shorts",
+            "readwrite"
+          );
+
+        txS
+          .objectStore("saved_shorts")
+          .delete(id);
+
       } catch (err) {
-        console.error("Failed to remove bookmark", err);
+
+        console.error(
+          "Failed to remove bookmark from IndexedDB",
+          err
+        );
+
       }
+
     }
 
-    async function removeShortSave(id, cardElement) {
+
+    // ============================================================
+    // LOG INTERACTION
+    // ============================================================
+
+    async function logInteraction(
+      mediaId,
+      type
+    ) {
+
       try {
-        const db = await getShortsDB();
-        const tx = db.transaction("saved_shorts", "readwrite");
-        const store = tx.objectStore("saved_shorts");
-        store.delete(id);
-        cardElement.remove();
-        checkEmptyFeed();
+
+        const db =
+          await getAnalyticsDB();
+
+        const tx =
+          db.transaction(
+            "interactions",
+            "readwrite"
+          );
+
+        tx
+          .objectStore("interactions")
+          .add({
+            mediaId: mediaId,
+            type: type,
+            timestamp: new Date().toISOString()
+          });
+
       } catch (err) {
-        console.error("Failed to remove short bookmark", err);
+
+        console.error(
+          "Failed to log interaction",
+          err
+        );
+
       }
+
     }
 
-    async function logInteraction(mediaId, type) {
-      try {
-        const db = await getAnalyticsDB();
-        const tx = db.transaction("interactions", "readwrite");
-        const store = tx.objectStore("interactions");
-        store.add({
-          mediaId: mediaId,
-          type: type,
-          timestamp: new Date().toISOString()
-        });
-      } catch (err) {
-        console.error("Failed to log interaction", err);
+
+    // ============================================================
+    // YOUTUBE THUMBNAIL
+    // URL IS USED ONLY FOR THUMBNAIL
+    // ============================================================
+
+    function getThumbnailFromUrl(
+      urlString
+    ) {
+
+      if (!urlString) {
+
+        return 'https://picsum.photos/400/225';
+
       }
-    }
 
-    function getThumbnailFromUrl(urlString) {
-      if (!urlString) return 'https://picsum.photos/400/225';
-      const parts = urlString.split('/');
-      const rawId = parts[parts.length - 1].replace('watch?v=', '');
-      return `https://img.youtube.com/vi/${rawId}/hqdefault.jpg`;
-    }
+      let videoId = '';
 
-    function renderEmptyState(typeLabel) {
-      const feed = document.getElementById("saved-feed");
-      feed.innerHTML = `
-        <div class="empty-state">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-          <p>No saved ${typeLabel} found.</p>
-        </div>
-      `;
-    }
 
-    function checkEmptyFeed() {
-      const feed = document.getElementById("saved-feed");
-      if (!feed.querySelector('.video-card') && !feed.querySelector('.short-card')) {
-        const activeFilter = document.querySelector('.filter-btn.active').id === 'btnShowVideos' ? 'videos' : 'shorts';
-        renderEmptyState(activeFilter);
+      if (urlString.includes('/shorts/')) {
+
+        videoId =
+          urlString
+            .split('/shorts/')[1];
+
       }
+
+      else if (urlString.includes('v=')) {
+
+        videoId =
+          urlString
+            .split('v=')[1]
+            .split('&')[0];
+
+      }
+
+      else {
+
+        videoId =
+          urlString
+            .split('/')
+            .pop();
+
+      }
+
+
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
     }
 
-    function createVideoCardElement(item) {
-      const card = document.createElement('a');
-      card.href = item.url || '#';
-      card.className = 'video-card';
-      card.setAttribute('data-id', item.id);
+
+    // ============================================================
+    // SAVED VIDEO CARD
+    // ============================================================
+
+    function createVideoCardElement(
+      item,
+      onRemove
+    ) {
+
+      const card =
+        document.createElement('a');
+
+
+      // ========================================================
+      // IMPORTANT:
+      // href = CLICK DESTINATION
+      // url  = THUMBNAIL SOURCE
+      // ========================================================
+
+      card.href =
+        item.href ||
+        item.url ||
+        '#';
+
+
+      card.className =
+        'video-card';
+
+
+      card.setAttribute(
+        'data-id',
+        item.id
+      );
+
 
       card.innerHTML = `
-        <div class="video-thumbnail-box" style="background-image: url('${getThumbnailFromUrl(item.url)}')">
-          <button class="save-btn saved" data-id="${item.id}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+
+        <div
+          class="video-thumbnail-box"
+          style="background-image: url('${getThumbnailFromUrl(item.url)}')"
+        >
+
+          <button
+            class="save-btn saved"
+            data-id="${item.id}"
+          >
+
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <path
+                d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+              ></path>
+
             </svg>
+
           </button>
+
         </div>
+
+
         <div class="video-meta">
-          <div class="channel-avatar" style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"></div>
+
+          <div
+            class="channel-avatar"
+            style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"
+          ></div>
+
+
           <div class="video-details">
-            <span class="video-title">${item.title}</span>
-            <span class="video-subtext">${item.creator} • 5.6 lakh views • 1 day ago</span>
+
+            <span class="video-title">
+              ${item.title || 'Untitled Video'}
+            </span>
+
+            <span class="video-subtext">
+              ${item.creator || 'Creator'} • Saved Video
+            </span>
+
           </div>
+
         </div>
+
       `;
 
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.save-btn')) return;
-        logInteraction(item.id, 'click');
-      });
 
-      const saveBtn = card.querySelector('.save-btn');
-      saveBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        removeVideoSave(item.id, card);
-      });
+      card.addEventListener(
+        'click',
+        (e) => {
+
+          if (
+            e.target.closest('.save-btn')
+          ) {
+
+            return;
+
+          }
+
+          logInteraction(
+            item.id,
+            'click'
+          );
+
+        }
+      );
+
+
+      const saveBtn =
+        card.querySelector(
+          '.save-btn'
+        );
+
+
+      saveBtn.addEventListener(
+        'click',
+        async (e) => {
+
+          e.preventDefault();
+
+          e.stopPropagation();
+
+
+          await removeSaveDB(
+            item.id
+          );
+
+
+          if (onRemove) {
+
+            onRemove(
+              item.id
+            );
+
+          }
+
+        }
+      );
+
 
       return card;
+
     }
 
-    function createShortCardElement(item) {
-      const shortCard = document.createElement('a');
-      shortCard.href = `shorts.html?id=${item.id}`;
-      shortCard.className = 'short-card';
-      shortCard.setAttribute('data-id', item.id);
-      shortCard.style.backgroundImage = `url('${getThumbnailFromUrl(item.url)}')`;
+
+    // ============================================================
+    // SAVED SHORT CARD
+    // ============================================================
+
+    function createShortCardElement(
+      item,
+      onRemove
+    ) {
+
+      const shortCard =
+        document.createElement('a');
+
+
+      // ========================================================
+      // IMPORTANT:
+      // href = CLICK DESTINATION
+      // url  = THUMBNAIL SOURCE
+      // ========================================================
+
+      shortCard.href =
+        item.href ||
+        item.url ||
+        `shorts.html?id=${item.id}`;
+
+
+      shortCard.className =
+        'short-card';
+
+
+      shortCard.setAttribute(
+        'data-id',
+        item.id
+      );
+
+
+      shortCard.style.backgroundImage =
+        `url('${getThumbnailFromUrl(item.url)}')`;
+
+
       shortCard.innerHTML = `
-        <button class="save-btn saved" data-id="${item.id}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+
+        <button
+          class="save-btn saved"
+          data-id="${item.id}"
+        >
+
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+
+            <path
+              d="M19 21l-7-5-7 5V5a2 2 0 0 1 2 2h10a2 2 0 0 1 2 2z"
+            ></path>
+
           </svg>
+
         </button>
-        <div class="card-bottom">${item.title}</div>
+
+
+        <div class="card-bottom">
+
+          ${item.title || 'Short'}
+
+        </div>
+
       `;
 
-      shortCard.addEventListener('click', (e) => {
-        if (e.target.closest('.save-btn')) return;
-        logInteraction(item.id, 'click');
-      });
 
-      const saveBtn = shortCard.querySelector('.save-btn');
-      saveBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        removeShortSave(item.id, shortCard);
-      });
+              shortCard.addEventListener(
+          'click',
+          (e) => {
 
-      return shortCard;
-    }
+            if (
+              e.target.closest('.save-btn')
+            ) {
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      const feed = document.getElementById("saved-feed");
-      const btnShowVideos = document.getElementById("btnShowVideos");
-      const btnShowShorts = document.getElementById("btnShowShorts");
+              return;
 
-      // Active tab state: 'videos' or 'shorts'
-      let currentMode = 'videos';
+            }
 
-      const videoIds = await fetchVideoBookmarks();
-      const savedShortsFromDB = await fetchShortsBookmarks();
+            logInteraction(
+              item.id,
+              'click'
+            );
 
-      const savedVideos = mediaData.filter(item => item.type === "video" && videoIds.includes(item.id));
-      
-      const savedShortsMap = new Map();
-      savedShortsFromDB.forEach(s => savedShortsMap.set(s.id, s));
-      mediaData.filter(item => item.type === "shorts" && videoIds.includes(item.id))
-               .forEach(s => savedShortsMap.set(s.id, s));
-      
-      const savedShorts = Array.from(savedShortsMap.values());
-
-      function renderUI() {
-        feed.innerHTML = '';
-
-        if (currentMode === 'videos') {
-          btnShowVideos.classList.add('active');
-          btnShowShorts.classList.remove('active');
-
-          if (savedVideos.length === 0) {
-            renderEmptyState('videos');
-          } else {
-            savedVideos.forEach(v => feed.appendChild(createVideoCardElement(v)));
           }
-        } else if (currentMode === 'shorts') {
-          btnShowShorts.classList.add('active');
-          btnShowVideos.classList.remove('active');
+        );
 
-          if (savedShorts.length === 0) {
-            renderEmptyState('shorts');
-          } else {
-            const grid = document.createElement('div');
-            grid.className = 'shorts-grid';
-            savedShorts.forEach(short => grid.appendChild(createShortCardElement(short)));
-            feed.appendChild(grid);
+
+        const saveBtn =
+          shortCard.querySelector(
+            '.save-btn'
+          );
+
+
+        saveBtn.addEventListener(
+          'click',
+          async (e) => {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+
+            await removeSaveDB(
+              item.id
+            );
+
+
+            if (onRemove) {
+
+              onRemove(
+                item.id
+              );
+
+            }
+
           }
-        }
+        );
+
+
+        return shortCard;
+
       }
 
-      btnShowVideos.addEventListener('click', () => {
-        currentMode = 'videos';
-        renderUI();
-      });
 
-      btnShowShorts.addEventListener('click', () => {
-        currentMode = 'shorts';
-        renderUI();
-      });
+      // ============================================================
+      // MAIN
+      // ============================================================
 
-      renderUI();
-    });
+      document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+          const feed =
+            document.getElementById(
+              "saved-feed"
+            );
+
+
+          // ======================================================
+          // EXTRACT RAW DATA SAFELY FROM WINDOW
+          // ======================================================
+
+          const rawMedia =
+            (
+              typeof mediaData !== 'undefined' &&
+              Array.isArray(mediaData)
+            )
+              ? mediaData
+              : [];
+
+
+          // ======================================================
+          // LOAD IDS / OBJECTS FROM INDEXEDDB
+          // ======================================================
+
+          const analyticsBookmarks =
+            await fetchAnalyticsBookmarks();
+
+
+          const shortsAppBookmarks =
+            await fetchShortsBookmarksDB();
+
+
+          // ======================================================
+          // CONSOLIDATE BOOKMARK MAP
+          // ======================================================
+
+          const bookmarkedIds =
+            new Set([
+              ...analyticsBookmarks.map(
+                b => b.mediaId || b.id
+              ),
+
+              ...shortsAppBookmarks.map(
+                b => b.id || b.mediaId
+              )
+            ]);
+
+
+          // ======================================================
+          // MAP DB BOOKMARK IDS BACK TO COMPLETE OBJECTS
+          // ======================================================
+
+          let savedVideos = [];
+
+          let savedShorts = [];
+
+
+          bookmarkedIds.forEach(
+            (id) => {
+
+              if (!id) {
+
+                return;
+
+              }
+
+
+              const matchedItem =
+                rawMedia.find(
+                  m => m.id === id
+                );
+
+
+              if (matchedItem) {
+
+                if (
+                  matchedItem.type === 'shorts'
+                ) {
+
+                  savedShorts.push(
+                    matchedItem
+                  );
+
+                }
+
+                else {
+
+                  savedVideos.push(
+                    matchedItem
+                  );
+
+                }
+
+              }
+
+              else {
+
+                // Object stored directly in IndexedDB fallback
+
+                const directShort =
+                  shortsAppBookmarks.find(
+                    s =>
+                      (s.id || s.mediaId) === id
+                  );
+
+
+                if (directShort) {
+
+                  savedShorts.push({
+
+                    id:
+                      directShort.id || id,
+
+                    type:
+                      'shorts',
+
+                    title:
+                      directShort.title ||
+                      'Saved Short',
+
+                    url:
+                      directShort.url || '',
+
+                    href:
+                      directShort.href || ''
+
+                  });
+
+                }
+
+              }
+
+            }
+          );
+
+
+          // ======================================================
+          // DASHBOARD VIEW
+          // ======================================================
+
+          function renderDashboard() {
+
+            feed.innerHTML = '';
+
+
+            // ==================================================
+            // FOLDER 1: VIDEOS
+            // ==================================================
+
+            const videoSection =
+              document.createElement(
+                'section'
+              );
+
+
+            videoSection.className =
+              'folder-section';
+
+
+            const videoHeader =
+              document.createElement(
+                'div'
+              );
+
+
+            videoHeader.className =
+              'folder-header';
+
+
+            videoHeader.innerHTML = `
+
+              <div class="folder-title">
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+
+                  <path
+                    d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1.9-2-2-2zm-10 7V9l5 3-5 3z"
+                  />
+
+                </svg>
+
+                <span>
+                  Saved Videos
+                </span>
+
+              </div>
+
+            `;
+
+
+            if (
+              savedVideos.length > 0
+            ) {
+
+              const viewAllVidBtn =
+                document.createElement(
+                  'button'
+                );
+
+
+              viewAllVidBtn.className =
+                'view-all-btn';
+
+
+              viewAllVidBtn.textContent =
+                'View All';
+
+
+              viewAllVidBtn.addEventListener(
+                'click',
+                renderAllVideosView
+              );
+
+
+              videoHeader.appendChild(
+                viewAllVidBtn
+              );
+
+            }
+
+
+            videoSection.appendChild(
+              videoHeader
+            );
+
+
+            if (
+              savedVideos.length === 0
+            ) {
+
+              videoSection.innerHTML += `
+
+                <div class="empty-state">
+
+                  <p>
+                    No saved videos
+                  </p>
+
+                </div>
+
+              `;
+
+            }
+
+            else {
+
+              const mostRecentVid =
+                savedVideos[
+                  savedVideos.length - 1
+                ];
+
+
+              videoSection.appendChild(
+
+                createVideoCardElement(
+                  mostRecentVid,
+                  (id) => {
+
+                    savedVideos =
+                      savedVideos.filter(
+                        v => v.id !== id
+                      );
+
+
+                    renderDashboard();
+
+                  }
+                )
+
+              );
+
+            }
+
+
+            feed.appendChild(
+              videoSection
+            );
+
+
+            // ==================================================
+            // FOLDER 2: SHORTS
+            // ==================================================
+
+            const shortsSection =
+              document.createElement(
+                'section'
+              );
+
+
+            shortsSection.className =
+              'folder-section';
+
+
+            const shortsHeader =
+              document.createElement(
+                'div'
+              );
+
+
+            shortsHeader.className =
+              'folder-header';
+
+
+            shortsHeader.innerHTML = `
+
+              <div class="folder-title">
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+
+                  <path
+                    d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"
+                  />
+
+                </svg>
+
+                <span>
+                  Saved Shorts
+                </span>
+
+              </div>
+
+            `;
+
+
+            if (
+              savedShorts.length > 0
+            ) {
+
+              const viewAllShortsBtn =
+                document.createElement(
+                  'button'
+                );
+
+
+              viewAllShortsBtn.className =
+                'view-all-btn';
+
+
+              viewAllShortsBtn.textContent =
+                'View All';
+
+
+              viewAllShortsBtn.addEventListener(
+                'click',
+                renderAllShortsView
+              );
+
+
+              shortsHeader.appendChild(
+                viewAllShortsBtn
+              );
+
+            }
+
+
+            shortsSection.appendChild(
+              shortsHeader
+            );
+
+
+            if (
+              savedShorts.length === 0
+            ) {
+
+              shortsSection.innerHTML += `
+
+                <div class="empty-state">
+
+                  <p>
+                    No saved shorts
+                  </p>
+
+                </div>
+
+              `;
+
+            }
+
+            else {
+
+              const grid =
+                document.createElement(
+                  'div'
+                );
+
+
+              grid.className =
+                'shorts-grid';
+
+
+              const topShorts =
+                savedShorts.slice(
+                  0,
+                  2
+                );
+
+
+              topShorts.forEach(
+                item => {
+
+                  grid.appendChild(
+
+                    createShortCardElement(
+                      item,
+                      (id) => {
+
+                        savedShorts =
+                          savedShorts.filter(
+                            s => s.id !== id
+                          );
+
+
+                        renderDashboard();
+
+                      }
+                    )
+
+                  );
+
+                }
+              );
+
+
+              shortsSection.appendChild(
+                grid
+              );
+
+            }
+
+
+            feed.appendChild(
+              shortsSection
+            );
+
+          }
+
+
+          // ======================================================
+          // ALL VIDEOS VIEW
+          // ======================================================
+
+          function renderAllVideosView() {
+
+            feed.innerHTML = '';
+
+
+            const subheader =
+              document.createElement(
+                'div'
+              );
+
+
+            subheader.className =
+              'subview-header';
+
+
+            subheader.innerHTML = `
+
+              <button
+                class="back-btn"
+                aria-label="Back"
+              >
+
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+
+                  <polyline
+                    points="15 18 9 12 15 6"
+                  ></polyline>
+
+                </svg>
+
+              </button>
+
+
+              <div class="folder-title">
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+
+                  <path
+                    d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7V9l5 3-5 3z"
+                  />
+
+                </svg>
+
+                <span>
+                  Saved Videos
+                </span>
+
+              </div>
+
+            `;
+
+
+            subheader
+              .querySelector(
+                '.back-btn'
+              )
+              .addEventListener(
+                'click',
+                renderDashboard
+              );
+
+
+            feed.appendChild(
+              subheader
+            );
+
+
+            if (
+              savedVideos.length === 0
+            ) {
+
+              feed.innerHTML += `
+
+                <div class="empty-state">
+
+                  <p>
+                    No saved videos
+                  </p>
+
+                </div>
+
+              `;
+
+              return;
+
+            }
+
+
+            savedVideos
+              .slice()
+              .reverse()
+              .forEach(
+                item => {
+
+                  feed.appendChild(
+
+                    createVideoCardElement(
+                      item,
+                      (id) => {
+
+                        savedVideos =
+                          savedVideos.filter(
+                            v => v.id !== id
+                          );
+
+
+                        renderAllVideosView();
+
+                      }
+                    )
+
+                  );
+
+                }
+              );
+
+          }
+
+
+          // ======================================================
+          // ALL SHORTS VIEW
+          // ======================================================
+
+          function renderAllShortsView() {
+
+            feed.innerHTML = '';
+
+
+            const subheader =
+              document.createElement(
+                'div'
+              );
+
+
+            subheader.className =
+              'subview-header';
+
+
+            subheader.innerHTML = `
+
+              <button
+                class="back-btn"
+                aria-label="Back"
+              >
+
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+
+                  <polyline
+                    points="15 18 9 12 15 6"
+                  ></polyline>
+
+                </svg>
+
+              </button>
+
+
+              <div class="folder-title">
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+
+                  <path
+                    d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"
+                  />
+
+                </svg>
+
+                <span>
+                  Saved Shorts
+                </span>
+
+              </div>
+
+            `;
+
+
+            subheader
+              .querySelector(
+                '.back-btn'
+              )
+              .addEventListener(
+                'click',
+                renderDashboard
+              );
+
+
+            feed.appendChild(
+              subheader
+            );
+
+
+            if (
+              savedShorts.length === 0
+            ) {
+
+              feed.innerHTML += `
+
+                <div class="empty-state">
+
+                  <p>
+                    No saved shorts
+                  </p>
+
+                </div>
+
+              `;
+
+              return;
+
+            }
+
+
+            const grid =
+              document.createElement(
+                'div'
+              );
+
+
+            grid.className =
+              'shorts-grid';
+
+
+            savedShorts
+              .slice()
+              .reverse()
+              .forEach(
+                item => {
+
+                  grid.appendChild(
+
+                    createShortCardElement(
+                      item,
+                      (id) => {
+
+                        savedShorts =
+                          savedShorts.filter(
+                            s => s.id !== id
+                          );
+
+
+                        renderAllShortsView();
+
+                      }
+                    )
+
+                  );
+
+                }
+              );
+
+
+            feed.appendChild(
+              grid
+            );
+
+          }
+
+
+          // ======================================================
+          // INITIAL RENDER
+          // ======================================================
+
+          renderDashboard();
+
+        }
+      );
+
   </script>
+
 </body>
 </html>
