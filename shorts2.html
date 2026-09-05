@@ -255,6 +255,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
           <span>Shorts</span>
         </a>
+        <a href="map.html" class="nav-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span>Map</span>
+        </a>
         <a href="savedvideo.html" class="nav-chip">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>
           <span>Playlists</span>
@@ -271,123 +275,79 @@
 
   <script src="data.js"></script>
   <script>
-    // --- IndexedDB Helper ---
-    function getDB() {
+    // --- IndexedDB Setup ---
+    const DB_NAME = 'ShortsAppDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'saved_shorts';
+
+    function openDB() {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("AnalyticsDB", 3);
-        request.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains("interactions")) {
-            db.createObjectStore("interactions", { keyPath: "id", autoIncrement: true });
-          }
-          if (!db.objectStoreNames.contains("bookmarks")) {
-            db.createObjectStore("bookmarks", { keyPath: "mediaId" });
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
           }
         };
-        request.onsuccess = (e) => resolve(e.target.result);
+        request.onsuccess = () => resolve(request.result);
         request.onerror = (e) => reject(e.target.error);
       });
     }
 
-    async function logInteraction(mediaId, type) {
-      try {
-        const db = await getDB();
-        const tx = db.transaction("interactions", "readwrite");
-        const store = tx.objectStore("interactions");
-        store.add({ mediaId: mediaId, type: type, timestamp: new Date().toISOString() });
-      } catch (err) {
-        console.error("Interaction logging failed", err);
-      }
+    async function saveShortToDB(item) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.put({ ...item, savedAt: Date.now() });
+        req.onsuccess = () => resolve();
+        req.onerror = (e) => reject(e.target.error);
+      });
     }
 
-    async function toggleSaveShort(id) {
-      try {
-        const db = await getDB();
-        const tx = db.transaction("bookmarks", "readwrite");
-        const store = tx.objectStore("bookmarks");
-        
-        const getReq = store.get(id);
-        getReq.onsuccess = () => {
-          let isSaved = false;
-          if (getReq.result) {
-            store.delete(id);
-            isSaved = false;
-          } else {
-            store.put({ mediaId: id, savedAt: new Date().toISOString() });
-            isSaved = true;
-          }
-          updateShortBookmarkUI(id, isSaved);
-        };
-      } catch (err) {
-        console.error("Failed to update bookmark", err);
-      }
+    async function removeShortFromDB(id) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => resolve();
+        req.onerror = (e) => reject(e.target.error);
+      });
     }
 
     async function isShortSaved(id) {
-      try {
-        const db = await getDB();
-        return new Promise((resolve) => {
-          const tx = db.transaction("bookmarks", "readonly");
-          const store = tx.objectStore("bookmarks");
-          const req = store.get(id);
-          req.onsuccess = () => resolve(!!req.result);
-          req.onerror = () => resolve(false);
-        });
-      } catch (err) {
-        return false;
-      }
+      const db = await openDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.get(id);
+        req.onsuccess = () => resolve(!!req.result);
+        req.onerror = () => resolve(false);
+      });
     }
 
-    function updateShortBookmarkUI(id, isSaved) {
-      const btn = document.querySelector(`.save-btn[data-id="${id}"]`);
-      if (btn) {
-        btn.classList.toggle('saved', isSaved);
-        const saveText = btn.querySelector('.save-text');
-        if (saveText) saveText.textContent = isSaved ? 'Saved' : 'Save';
-      }
-    }
-
-    // --- Fisher-Yates Shuffle ---
-    function shuffleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    // Returns a frozen feed order for this browser session
-    function getFrozenSessionFeed() {
-      const rawShorts = mediaData.filter(item => item.type === 'shorts');
-      const frozenOrderJSON = sessionStorage.getItem('frozen_shorts_order');
-
-      if (frozenOrderJSON) {
-        try {
-          const savedIds = JSON.parse(frozenOrderJSON);
-          const reconstructed = savedIds.map(id => rawShorts.find(s => s.id === id)).filter(Boolean);
-          if (reconstructed.length === rawShorts.length) {
-            return reconstructed;
-          }
-        } catch (e) {
-          console.error("Failed to restore frozen feed state", e);
-        }
-      }
-
-      // Shuffle once and freeze it for the session
-      const newShuffled = shuffleArray(rawShorts);
-      sessionStorage.setItem('frozen_shorts_order', JSON.stringify(newShuffled.map(s => s.id)));
-      return newShuffled;
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
+    // --- DOM Scripting ---
+    document.addEventListener("DOMContentLoaded", async () => {
       const viewport = document.getElementById('shortsViewport');
-      const frozenFeed = getFrozenSessionFeed();
+      let shortsList = mediaData.filter(item => item.type === 'shorts');
 
+      // Helper function to dynamically parse video ID from URL string
       function getEmbedUrlFromUrl(urlString) {
         const parts = urlString.split('/');
         const rawId = parts[parts.length - 1].replace('watch?v=', '');
         return `https://www.youtube.com/embed/${rawId}?autoplay=1&mute=1&loop=1&playlist=${rawId}&controls=0&modestbranding=1&rel=0`;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id');
+
+      if (targetId) {
+        const targetIndex = shortsList.findIndex(item => item.id === targetId);
+        if (targetIndex > -1) {
+          const targetedItem = shortsList.splice(targetIndex, 1)[0];
+          shortsList.unshift(targetedItem);
+        }
       }
 
       function createShortSlide(item) {
@@ -434,54 +394,88 @@
           </div>
         `;
 
+        // Handle Save Button click & initial state check
         const saveBtn = slide.querySelector('.save-btn');
-        isShortSaved(item.id).then(saved => updateShortBookmarkUI(item.id, saved));
+        const saveText = saveBtn.querySelector('.save-text');
 
-        saveBtn.addEventListener('click', (e) => {
+        isShortSaved(item.id).then(saved => {
+          if (saved) {
+            saveBtn.classList.add('saved');
+            saveText.textContent = 'Saved';
+          }
+        });
+
+        // Long-press detection to open savedvideo.html
+        let pressTimer = null;
+        let isLongPressAction = false;
+
+        const startPress = () => {
+          isLongPressAction = false;
+          if (pressTimer) clearTimeout(pressTimer);
+
+          pressTimer = setTimeout(() => {
+            isLongPressAction = true;
+            window.location.href = "savedvideo.html";
+          }, 400); // 400ms long-press threshold
+        };
+
+        const cancelPress = () => {
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+        };
+
+        // Attach touch & mouse event listeners
+        saveBtn.addEventListener('mousedown', startPress);
+        saveBtn.addEventListener('touchstart', startPress, { passive: true });
+
+        saveBtn.addEventListener('mousemove', cancelPress);
+        saveBtn.addEventListener('touchmove', cancelPress, { passive: true });
+
+        saveBtn.addEventListener('mouseup', cancelPress);
+        saveBtn.addEventListener('mouseleave', cancelPress);
+        saveBtn.addEventListener('touchend', cancelPress);
+
+        saveBtn.addEventListener('click', async (e) => {
           e.preventDefault();
           e.stopPropagation();
-          toggleSaveShort(item.id);
+
+          // Standard short tap toggles save state
+          if (!isLongPressAction) {
+            const currentlySaved = saveBtn.classList.contains('saved');
+            if (currentlySaved) {
+              await removeShortFromDB(item.id);
+              saveBtn.classList.remove('saved');
+              saveText.textContent = 'Save';
+            } else {
+              await saveShortToDB(item);
+              saveBtn.classList.add('saved');
+              saveText.textContent = 'Saved';
+            }
+          }
+          isLongPressAction = false;
         });
 
         return slide;
       }
 
-      // Track active short ID & scroll offset in sessionStorage
       const viewObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute('data-id');
-            if (id) {
+            if (id && typeof logInteraction === 'function') {
               logInteraction(id, 'view');
-              sessionStorage.setItem('frozen_active_short_id', id);
             }
           }
         });
       }, { threshold: 0.6 });
 
-      viewport.addEventListener('scroll', () => {
-        sessionStorage.setItem('frozen_scroll_top', viewport.scrollTop);
-      });
-
-      // Populate DOM in exact frozen order
-      frozenFeed.forEach(item => {
+      shortsList.forEach(item => {
         const slideEl = createShortSlide(item);
         viewport.appendChild(slideEl);
         viewObserver.observe(slideEl);
       });
-
-      // Restore exact scroll position and video frame
-      const savedScrollTop = sessionStorage.getItem('frozen_scroll_top');
-      const activeId = sessionStorage.getItem('frozen_active_short_id');
-
-      if (savedScrollTop !== null) {
-        viewport.scrollTop = parseInt(savedScrollTop, 10);
-      } else if (activeId) {
-        const activeSlide = viewport.querySelector(`.short-slide[data-id="${activeId}"]`);
-        if (activeSlide) {
-          activeSlide.scrollIntoView({ behavior: 'instant' });
-        }
-      }
     });
   </script>
 </body>
