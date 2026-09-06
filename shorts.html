@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
   <title>Shorts</title>
+
   <style>
+
     :root {
       --bg-color: #0f0f0f;
       --card-bg: #212121;
@@ -20,470 +27,4005 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+
       user-select: none;
     }
 
-    body, html {
+    body,
+    html {
+
       height: 100%;
       width: 100%;
+
       background-color: #000000;
+
       color: var(--text-main);
+
       overflow: hidden;
+
       display: flex;
+
       justify-content: center;
+
     }
 
     .app-container {
+
       width: 100%;
+
       max-width: 412px;
+
       height: 100vh;
+
       background-color: #000000;
+
       position: relative;
+
       display: flex;
+
       flex-direction: column;
+
     }
 
-    /* Top Navigation Chips Carousel Overlay */
+
+    /* =========================================================
+       TOP NAVIGATION
+    ========================================================= */
+
     .carousel-container {
+
       position: absolute;
+
       top: 0;
       left: 0;
       right: 0;
+
       z-index: 50;
+
       display: flex;
+
       align-items: center;
+
       padding: 12px 0;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+
+      background:
+
+        linear-gradient(
+          to bottom,
+
+          rgba(0, 0, 0, 0.8) 0%,
+
+          rgba(0, 0, 0, 0) 100%
+        );
+
       pointer-events: auto;
+
     }
+
 
     .sticky-compass {
+
       position: sticky;
+
       left: 0;
+
       z-index: 10;
+
       padding: 0 8px 0 12px;
+
       display: flex;
+
       align-items: center;
+
     }
+
 
     .compass-btn {
-      background-color: var(--pill-bg);
+
+      background-color:
+        var(--pill-bg);
+
       border-radius: 8px;
+
       width: 34px;
+
       height: 32px;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       cursor: pointer;
+
       backdrop-filter: blur(8px);
+
     }
+
 
     .category-scroll {
+
       display: flex;
+
       gap: 8px;
+
       overflow-x: auto;
+
       padding-right: 12px;
+
       scrollbar-width: none;
+
     }
-    .category-scroll::-webkit-scrollbar { display: none; }
+
+
+    .category-scroll::-webkit-scrollbar {
+
+      display: none;
+
+    }
+
 
     .nav-chip {
-      background-color: var(--pill-bg);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      white-space: nowrap;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-      text-decoration: none;
-      backdrop-filter: blur(8px);
-    }
-    .nav-chip.active { background-color: var(--pill-active-bg); color: var(--pill-active-text); }
-    .nav-chip svg { width: 16px; height: 16px; }
 
-    /* Vertical Fullscreen Scroll Viewport */
-    .shorts-viewport {
-      height: 100%;
-      width: 100%;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scrollbar-width: none;
+      background-color:
+        var(--pill-bg);
+
+      color:
+        var(--text-main);
+
+      padding: 6px 12px;
+
+      border-radius: 8px;
+
+      font-size: 13px;
+
+      font-weight: 500;
+
+      white-space: nowrap;
+
+      cursor: pointer;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      flex-shrink: 0;
+
+      text-decoration: none;
+
+      backdrop-filter: blur(8px);
+
     }
-    .shorts-viewport::-webkit-scrollbar { display: none; }
+
+
+    .nav-chip.active {
+
+      background-color:
+        var(--pill-active-bg);
+
+      color:
+        var(--pill-active-text);
+
+    }
+
+
+    .nav-chip svg {
+
+      width: 16px;
+
+      height: 16px;
+
+    }
+
+
+    /* =========================================================
+       SHORTS VIEWPORT
+    ========================================================= */
+
+    .shorts-viewport {
+
+      height: 100%;
+
+      width: 100%;
+
+      overflow-y: auto;
+
+      scrollbar-width: none;
+
+      overscroll-behavior-y: contain;
+
+      -webkit-overflow-scrolling: touch;
+
+      scroll-behavior: auto;
+
+    }
+
+
+    .shorts-viewport::-webkit-scrollbar {
+
+      display: none;
+
+    }
+
 
     .short-slide {
+
       height: 100vh;
+
       width: 100%;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
+
       position: relative;
+
       background-color: #000000;
+
       display: flex;
+
       justify-content: center;
+
       align-items: center;
-      flex-shrink: 0;
+
       overflow: hidden;
+
+      flex-shrink: 0;
+
     }
+
 
     .short-embed-frame {
+
       width: 100%;
+
       height: 100%;
+
       border: none;
+
       pointer-events: auto;
+
       transform: scale(1.05);
+
     }
 
-    /* Actions Side Bar */
+
+    /* =========================================================
+       ACTIONS
+    ========================================================= */
+
     .actions-bar {
+
       position: absolute;
+
       right: 12px;
+
       bottom: 80px;
+
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
+
       gap: 18px;
+
       z-index: 20;
+
     }
+
 
     .action-btn {
+
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
+
       gap: 4px;
+
       background: none;
+
       border: none;
+
       color: #ffffff;
+
       font-size: 11px;
+
       font-weight: 500;
+
       cursor: pointer;
+
       text-decoration: none;
+
       -webkit-touch-callout: none;
+
     }
+
 
     .action-icon-wrapper {
+
       width: 44px;
+
       height: 44px;
+
       border-radius: 50%;
-      background: rgba(33, 33, 33, 0.6);
+
+      background:
+        rgba(33, 33, 33, 0.6);
+
       backdrop-filter: blur(10px);
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
-      transition: background-color 0.2s ease, fill 0.2s ease;
+
+      transition:
+        background-color 0.2s ease,
+        fill 0.2s ease;
+
     }
+
+
     .action-icon-wrapper svg {
+
       width: 22px;
+
       height: 22px;
+
       fill: #ffffff;
+
     }
 
-    /* Active Save Button State */
-    .save-btn.saved .action-icon-wrapper {
+
+    .save-btn.saved
+    .action-icon-wrapper {
+
       background: #ffffff;
+
     }
-    .save-btn.saved .action-icon-wrapper svg {
+
+
+    .save-btn.saved
+    .action-icon-wrapper svg {
+
       fill: #0f0f0f;
+
     }
 
-    /* Bottom Information Bar */
+
+    /* =========================================================
+       BOTTOM INFORMATION
+    ========================================================= */
+
     .bottom-info {
-      position: absolute;
-      left: 12px;
-      bottom: 24px;
-      right: 72px;
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: none;
-    }
-    .bottom-info * { pointer-events: auto; }
 
-    .creator-profile { display: flex; align-items: center; gap: 10px; }
-    .creator-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-size: cover;
-      background-position: center;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: absolute;
+
+      left: 12px;
+
+      bottom: 24px;
+
+      right: 72px;
+
+      z-index: 20;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+      pointer-events: none;
+
     }
-    .creator-handle { font-size: 14px; font-weight: 600; color: #ffffff; }
+
+
+    .bottom-info * {
+
+      pointer-events: auto;
+
+    }
+
+
+    .creator-profile {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+    }
+
+
+    .creator-avatar {
+
+      width: 32px;
+
+      height: 32px;
+
+      border-radius: 50%;
+
+      background-size: cover;
+
+      background-position: center;
+
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.3);
+
+    }
+
+
+    .creator-handle {
+
+      font-size: 14px;
+
+      font-weight: 600;
+
+      color: #ffffff;
+
+    }
+
 
     .subscribe-btn {
-      background-color: var(--accent-red);
+
+      background-color:
+        var(--accent-red);
+
       color: #ffffff;
+
       border: none;
+
       padding: 6px 12px;
+
       border-radius: 18px;
+
       font-weight: 600;
+
       font-size: 12px;
+
       cursor: pointer;
+
     }
+
 
     .short-caption {
+
       font-size: 13px;
+
       line-height: 1.35;
+
       color: #ffffff;
+
       display: -webkit-box;
+
       -webkit-line-clamp: 2;
+
       -webkit-box-orient: vertical;
+
       overflow: hidden;
+
     }
+
+
+    /* =========================================================
+       VIRTUALIZATION SPACERS
+
+       These are NOT Shorts.
+
+       They contain no images,
+       no iframe,
+       no video,
+       no external media.
+    ========================================================= */
+
+    .virtual-spacer {
+
+      width: 100%;
+
+      height: 0;
+
+      padding: 0;
+
+      margin: 0;
+
+      border: none;
+
+      pointer-events: none;
+
+      visibility: hidden;
+
+    }
+
   </style>
+
 </head>
+
+
 <body>
+
+
   <div class="app-container">
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
     <div class="carousel-container">
+
+
       <div class="category-scroll">
+
+
         <div class="sticky-compass">
+
           <div class="compass-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              ></circle>
+
+              <polygon
+                points="
+                  16.24 7.76
+                  14.12 14.12
+                  7.76 16.24
+                  9.88 9.88
+                  16.24 7.76
+                "
+              ></polygon>
+
+            </svg>
+
           </div>
+
         </div>
-        <a href="index.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+
+
+        <a
+          href="index.html"
+          class="nav-chip"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+
+            <path
+              d="
+                M10 20v-6h4v6h5v-8h3L12 3
+                2 12h3v8z
+              "
+            />
+
+          </svg>
+
           <span>Home</span>
+
         </a>
-        <a href="shorts.html" class="nav-chip active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.77 10.32l-1.2-.5L18 8.6a3.6 3.6 0 00-1.87-6.75 3.58 3.58 0 00-1.63.4l-6.8 3.88a3.6 3.6 0 001.27 6.75l1.2.5L8 14.6a3.6 3.6 0 001.87 6.75c.56 0 1.1-.14 1.63-.4l6.8-3.88a3.6 3.6 0 00-1.27-6.75z"/></svg>
+
+
+        <a
+          href="shorts.html"
+          class="nav-chip active"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+
+            <path
+              d="
+                M17.77 10.32l-1.2-.5L18 8.6
+                a3.6 3.6 0 00-1.87-6.75
+                3.58 3.58 0 00-1.63.4
+                l-6.8 3.88
+                a3.6 3.6 0 001.27 6.75
+                l1.2.5L8 14.6
+                a3.6 3.6 0 001.87 6.75
+                c.56 0 1.1-.14 1.63-.4
+                l6.8-3.88
+                a3.6 3.6 0 00-1.27-6.75z
+              "
+            />
+
+          </svg>
+
           <span>Shorts</span>
+
         </a>
-        <a href="savedvideo.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg>
+
+
+        <a
+          href="savedvideo.html"
+          class="nav-chip"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+
+            <path
+              d="
+                M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z
+              "
+            />
+
+          </svg>
+
           <span>Playlists</span>
+
         </a>
-        <a href="history.html" class="nav-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+
+        <a
+          href="history.html"
+          class="nav-chip"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            ></circle>
+
+            <polyline
+              points="
+                12 6
+                12 12
+                16 14
+              "
+            ></polyline>
+
+          </svg>
+
           <span>History</span>
+
         </a>
+
+
       </div>
+
+
     </div>
 
-    <main class="shorts-viewport" id="shortsViewport"></main>
+
+    <!-- =====================================================
+         SHORTS MOUNT POINT
+
+         Only ONE .short-slide will exist here.
+
+         All other Shorts stay ONLY as metadata in data.js.
+    ====================================================== -->
+
+    <main
+      class="shorts-viewport"
+      id="shortsViewport"
+    ></main>
+
+
   </div>
 
+
+  <!-- =======================================================
+       DATA SOURCE
+
+       THIS STAYS SEPARATE.
+
+       data.js provides mediaData.
+  ======================================================== -->
+
   <script src="data.js"></script>
+
+
+  <!-- =======================================================
+       SHORTS ENGINE
+
+       ALL OPTIMIZATION LOGIC IS INSIDE THIS HTML FILE.
+  ======================================================== -->
+
   <script>
-    // --- IndexedDB Helper ---
+
+  (() => {
+
+    "use strict";
+
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================= */
+
+    const CONFIG = {
+
+      viewportId:
+        "shortsViewport",
+
+      orderStorageKey:
+        "frozen_shorts_order",
+
+      activeStorageKey:
+        "frozen_active_short_id",
+
+      indexStorageKey:
+        "frozen_active_short_index",
+
+      scrollStorageKey:
+        "frozen_scroll_top",
+
+      deepLinkParameter:
+        "short",
+
+      scrollSettleDelay:
+        120,
+
+      minimumSwipeDistance:
+        40
+
+    };
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let viewport = null;
+
+
+    /*
+
+      FEED EXISTS ONLY AS JAVASCRIPT METADATA.
+
+      This does NOT create:
+
+      - DOM elements
+      - iframes
+      - images
+      - videos
+
+    */
+
+    let feed = [];
+
+
+    let currentIndex = 0;
+
+
+    /*
+
+      ONLY THESE TWO MEDIA REFERENCES
+      ARE ALLOWED AT ONE TIME.
+
+    */
+
+    let activeSlide = null;
+
+    let activeIframe = null;
+
+
+    let topSpacer = null;
+
+    let bottomSpacer = null;
+
+
+    let scrollTimer = null;
+
+    let resizeTimer = null;
+
+
+    let isRendering = false;
+
+    let isProgrammaticScroll = false;
+
+
+    let touchStartY = 0;
+
+
+    let lastViewId = null;
+
+
+    let databasePromise = null;
+
+
+    /* =========================================================
+       INDEXEDDB
+
+       DATABASE CONNECTION IS REUSED.
+
+       It is NOT reopened repeatedly.
+    ========================================================= */
+
     function getDB() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open("AnalyticsDB", 3);
-        request.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains("interactions")) {
-            db.createObjectStore("interactions", { keyPath: "id", autoIncrement: true });
-          }
-          if (!db.objectStoreNames.contains("bookmarks")) {
-            db.createObjectStore("bookmarks", { keyPath: "mediaId" });
-          }
-        };
-        request.onsuccess = (e) => resolve(e.target.result);
-        request.onerror = (e) => reject(e.target.error);
-      });
-    }
 
-    async function logInteraction(mediaId, type) {
-      try {
-        const db = await getDB();
-        const tx = db.transaction("interactions", "readwrite");
-        const store = tx.objectStore("interactions");
-        store.add({ mediaId: mediaId, type: type, timestamp: new Date().toISOString() });
-      } catch (err) {
-        console.error("Interaction logging failed", err);
-      }
-    }
 
-    async function toggleSaveShort(id) {
-      try {
-        const db = await getDB();
-        const tx = db.transaction("bookmarks", "readwrite");
-        const store = tx.objectStore("bookmarks");
-        
-        const getReq = store.get(id);
-        getReq.onsuccess = () => {
-          let isSaved = false;
-          if (getReq.result) {
-            store.delete(id);
-            isSaved = false;
-          } else {
-            store.put({ mediaId: id, savedAt: new Date().toISOString() });
-            isSaved = true;
-          }
-          updateShortBookmarkUI(id, isSaved);
-        };
-      } catch (err) {
-        console.error("Failed to update bookmark", err);
-      }
-    }
+      if (databasePromise) {
 
-    async function isShortSaved(id) {
-      try {
-        const db = await getDB();
-        return new Promise((resolve) => {
-          const tx = db.transaction("bookmarks", "readonly");
-          const store = tx.objectStore("bookmarks");
-          const req = store.get(id);
-          req.onsuccess = () => resolve(!!req.result);
-          req.onerror = () => resolve(false);
-        });
-      } catch (err) {
-        return false;
-      }
-    }
+        return databasePromise;
 
-    function updateShortBookmarkUI(id, isSaved) {
-      const btn = document.querySelector(`.save-btn[data-id="${id}"]`);
-      if (btn) {
-        btn.classList.toggle('saved', isSaved);
-        const saveText = btn.querySelector('.save-text');
-        if (saveText) saveText.textContent = isSaved ? 'Saved' : 'Save';
-      }
-    }
-
-    // --- Fisher-Yates Shuffle ---
-    function shuffleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    // Returns a frozen feed order for this browser session
-    function getFrozenSessionFeed() {
-      const rawShorts = mediaData.filter(item => item.type === 'shorts');
-      const frozenOrderJSON = sessionStorage.getItem('frozen_shorts_order');
-
-      if (frozenOrderJSON) {
-        try {
-          const savedIds = JSON.parse(frozenOrderJSON);
-          const reconstructed = savedIds.map(id => rawShorts.find(s => s.id === id)).filter(Boolean);
-          if (reconstructed.length === rawShorts.length) {
-            return reconstructed;
-          }
-        } catch (e) {
-          console.error("Failed to restore frozen feed state", e);
-        }
       }
 
-      // Shuffle once and freeze it for the session
-      const newShuffled = shuffleArray(rawShorts);
-      sessionStorage.setItem('frozen_shorts_order', JSON.stringify(newShuffled.map(s => s.id)));
-      return newShuffled;
-    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const viewport = document.getElementById('shortsViewport');
-      const frozenFeed = getFrozenSessionFeed();
+      databasePromise =
+        new Promise(
+          (resolve, reject) => {
 
-      function getEmbedUrlFromUrl(urlString) {
-        const parts = urlString.split('/');
-        const rawId = parts[parts.length - 1].replace('watch?v=', '');
-        return `https://www.youtube.com/embed/${rawId}?autoplay=1&mute=1&loop=1&playlist=${rawId}&controls=0&modestbranding=1&rel=0`;
-      }
 
-      function createShortSlide(item) {
-        const slide = document.createElement('section');
-        slide.className = 'short-slide';
-        slide.setAttribute('data-id', item.id);
+            let request;
 
-        slide.innerHTML = `
-          <iframe 
-            class="short-embed-frame" 
-            src="${getEmbedUrlFromUrl(item.url)}" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
-          
-          <aside class="actions-bar">
-            <button class="action-btn">
-              <div class="action-icon-wrapper">
-                <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-              </div>
-              <span>Like</span>
-            </button>
-            <button class="action-btn save-btn" data-id="${item.id}">
-              <div class="action-icon-wrapper">
-                <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
-              </div>
-              <span class="save-text">Save</span>
-            </button>
-            <a href="${item.url}" target="_blank" class="action-btn">
-              <div class="action-icon-wrapper">
-                <svg viewBox="0 0 24 24"><path d="M14 9v-4l7 7-7 7v-4.1c-5 0-8.5 1.6-11 5.1 1-5 4-10 11-11z"/></svg>
-              </div>
-              <span>Open</span>
-            </a>
-          </aside>
 
-          <div class="bottom-info">
-            <div class="creator-profile">
-              <div class="creator-avatar" style="background-image: url('${item.creatorAvatar || 'https://picsum.photos/40/40'}')"></div>
-              <span class="creator-handle">${item.creator}</span>
-              <button class="subscribe-btn">Subscribe</button>
-            </div>
-            <p class="short-caption">${item.title}</p>
-          </div>
-        `;
+            try {
 
-        const saveBtn = slide.querySelector('.save-btn');
-        isShortSaved(item.id).then(saved => updateShortBookmarkUI(item.id, saved));
+              request =
+                indexedDB.open(
+                  "AnalyticsDB",
+                  3
+                );
 
-        saveBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleSaveShort(item.id);
-        });
-
-        return slide;
-      }
-
-      // Track active short ID & scroll offset in sessionStorage
-      const viewObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute('data-id');
-            if (id) {
-              logInteraction(id, 'view');
-              sessionStorage.setItem('frozen_active_short_id', id);
             }
+
+            catch (error) {
+
+              reject(error);
+
+              return;
+
+            }
+
+
+            request.onupgradeneeded =
+              event => {
+
+
+                const db =
+                  event.target.result;
+
+
+                if (
+                  !db.objectStoreNames.contains(
+                    "interactions"
+                  )
+                ) {
+
+                  db.createObjectStore(
+                    "interactions",
+                    {
+                      keyPath: "id",
+                      autoIncrement: true
+                    }
+                  );
+
+                }
+
+
+                if (
+                  !db.objectStoreNames.contains(
+                    "bookmarks"
+                  )
+                ) {
+
+                  db.createObjectStore(
+                    "bookmarks",
+                    {
+                      keyPath: "mediaId"
+                    }
+                  );
+
+                }
+
+
+              };
+
+
+            request.onsuccess =
+              event => {
+
+
+                const db =
+                  event.target.result;
+
+
+                db.onversionchange =
+                  () => {
+
+                    db.close();
+
+                    databasePromise = null;
+
+                  };
+
+
+                resolve(db);
+
+              };
+
+
+            request.onerror =
+              () => {
+
+                databasePromise = null;
+
+                reject(request.error);
+
+              };
+
+
           }
+        );
+
+
+      return databasePromise;
+
+
+    }
+
+
+    /* =========================================================
+       LOG INTERACTION
+    ========================================================= */
+
+    async function logInteraction(
+      mediaId,
+      type
+    ) {
+
+
+      try {
+
+
+        const db =
+          await getDB();
+
+
+        const transaction =
+          db.transaction(
+            "interactions",
+            "readwrite"
+          );
+
+
+        const store =
+          transaction.objectStore(
+            "interactions"
+          );
+
+
+        store.add({
+
+          mediaId,
+
+          type,
+
+          timestamp:
+            new Date().toISOString()
+
         });
-      }, { threshold: 0.6 });
 
-      viewport.addEventListener('scroll', () => {
-        sessionStorage.setItem('frozen_scroll_top', viewport.scrollTop);
-      });
 
-      // Populate DOM in exact frozen order
-      frozenFeed.forEach(item => {
-        const slideEl = createShortSlide(item);
-        viewport.appendChild(slideEl);
-        viewObserver.observe(slideEl);
-      });
-
-      // Restore exact scroll position and video frame
-      const savedScrollTop = sessionStorage.getItem('frozen_scroll_top');
-      const activeId = sessionStorage.getItem('frozen_active_short_id');
-
-      if (savedScrollTop !== null) {
-        viewport.scrollTop = parseInt(savedScrollTop, 10);
-      } else if (activeId) {
-        const activeSlide = viewport.querySelector(`.short-slide[data-id="${activeId}"]`);
-        if (activeSlide) {
-          activeSlide.scrollIntoView({ behavior: 'instant' });
-        }
       }
-    });
+
+      catch (error) {
+
+        /*
+          Analytics must NEVER break
+          the Shorts experience.
+        */
+
+      }
+
+
+    }
+
+
+    /* =========================================================
+       BOOKMARK STATE
+    ========================================================= */
+
+    async function isShortSaved(
+      id
+    ) {
+
+
+      try {
+
+
+        const db =
+          await getDB();
+
+
+        return new Promise(
+          resolve => {
+
+
+            const transaction =
+              db.transaction(
+                "bookmarks",
+                "readonly"
+              );
+
+
+            const store =
+              transaction.objectStore(
+                "bookmarks"
+              );
+
+
+            const request =
+              store.get(id);
+
+
+            request.onsuccess =
+              () => {
+
+                resolve(
+                  Boolean(
+                    request.result
+                  )
+                );
+
+              };
+
+
+            request.onerror =
+              () => {
+
+                resolve(false);
+
+              };
+
+
+          }
+        );
+
+
+      }
+
+      catch (error) {
+
+        return false;
+
+      }
+
+
+    }
+
+
+    /* =========================================================
+       UPDATE SAVE BUTTON
+
+       Only searches inside the ACTIVE Short.
+    ========================================================= */
+
+    function updateShortBookmarkUI(
+      id,
+      isSaved
+    ) {
+
+
+      if (!activeSlide) {
+
+        return;
+
+      }
+
+
+      if (
+        activeSlide.dataset.id !== id
+      ) {
+
+        return;
+
+      }
+
+
+      const button =
+        activeSlide.querySelector(
+          ".save-btn"
+        );
+
+
+      if (!button) {
+
+        return;
+
+      }
+
+
+      button.classList.toggle(
+        "saved",
+        isSaved
+      );
+
+
+      const text =
+        button.querySelector(
+          ".save-text"
+        );
+
+
+      if (text) {
+
+        text.textContent =
+          isSaved
+            ? "Saved"
+            : "Save";
+
+      }
+
+
+    }
+
+
+    /* =========================================================
+       TOGGLE SAVE
+    ========================================================= */
+
+    async function toggleSaveShort(
+      id
+    ) {
+
+
+      try {
+
+
+        const db =
+          await getDB();
+
+
+        await new Promise(
+          (resolve, reject) => {
+
+
+            const transaction =
+              db.transaction(
+                "bookmarks",
+                "readwrite"
+              );
+
+
+            const store =
+              transaction.objectStore(
+                "bookmarks"
+              );
+
+
+            const request =
+              store.get(id);
+
+
+            request.onsuccess =
+              () => {
+
+
+                if (
+                  request.result
+                ) {
+
+                  store.delete(id);
+
+                }
+
+                else {
+
+                  store.put({
+
+                    mediaId: id,
+
+                    savedAt:
+                      new Date()
+                        .toISOString()
+
+                  });
+
+                }
+
+
+              };
+
+
+            transaction.oncomplete =
+              resolve;
+
+
+            transaction.onerror =
+              () => {
+
+                reject(
+                  transaction.error
+                );
+
+              };
+
+
+          }
+        );
+
+
+        const saved =
+          await isShortSaved(id);
+
+
+        updateShortBookmarkUI(
+          id,
+          saved
+        );
+
+
+      }
+
+      catch (error) {
+
+        console.warn(
+          "Bookmark operation failed"
+        );
+
+      }
+
+
+    }
+
+
+    /* =========================================================
+       SHUFFLE
+
+       FISHER-YATES
+    ========================================================= */
+
+    function shuffleArray(
+      array
+    ) {
+
+
+      const result =
+        array.slice();
+
+
+      for (
+        let i =
+          result.length - 1;
+
+        i > 0;
+
+        i--
+      ) {
+
+
+        const j =
+          Math.floor(
+            Math.random() *
+            (i + 1)
+          );
+
+
+        [
+          result[i],
+          result[j]
+        ] =
+        [
+          result[j],
+          result[i]
+        ];
+
+
+      }
+
+
+      return result;
+
+
+    }
+
+
+    /* =========================================================
+       GET SHORT METADATA
+
+       IMPORTANT:
+
+       This ONLY reads JavaScript objects.
+
+       No DOM is created.
+       No YouTube is contacted.
+    ========================================================= */
+
+    function getShortsData() {
+
+
+      if (
+        !Array.isArray(
+          window.mediaData
+        )
+      ) {
+
+        return [];
+
+      }
+
+
+      return window.mediaData.filter(
+        item => {
+
+          return (
+            item &&
+            item.type === "shorts"
+          );
+
+        }
+      );
+
+
+    }
+
+
+    /* =========================================================
+       FROZEN SESSION FEED
+    ========================================================= */
+
+    function getFrozenSessionFeed() {
+
+      const shorts =
+        getShortsData();
+
+
+      if (!shorts.length) {
+
+        return [];
+
+      }
+
+
+      const savedOrder =
+        sessionStorage.getItem(
+          CONFIG.orderStorageKey
+        );
+
+
+      if (savedOrder) {
+
+        try {
+
+          const ids =
+            JSON.parse(
+              savedOrder
+            );
+
+
+          if (Array.isArray(ids)) {
+
+            const byId =
+              new Map();
+
+
+            shorts.forEach(
+              item => {
+
+                byId.set(
+                  item.id,
+                  item
+                );
+
+              }
+            );
+
+
+            const reconstructed =
+              ids
+                .map(
+                  id =>
+                    byId.get(id)
+                )
+                .filter(Boolean);
+
+
+            if (
+              reconstructed.length ===
+              shorts.length
+            ) {
+
+              return reconstructed;
+
+            }
+
+          }
+
+        }
+
+        catch (error) {
+
+          /*
+            Broken session data.
+
+            A new feed will be created.
+          */
+
+        }
+
+      }
+
+
+      const shuffled =
+        shuffleArray(shorts);
+
+
+      try {
+
+        sessionStorage.setItem(
+
+          CONFIG.orderStorageKey,
+
+          JSON.stringify(
+            shuffled.map(
+              item => item.id
+            )
+          )
+
+        );
+
+      }
+
+      catch (error) {}
+
+
+      return shuffled;
+
+    }
+
+
+    /* =========================================================
+       URL DEEP LINK
+
+       shorts.html?short=s11
+    ========================================================= */
+
+    function getRequestedShortId() {
+
+      try {
+
+        const parameters =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        return parameters.get(
+          CONFIG.deepLinkParameter
+        );
+
+      }
+
+      catch (error) {
+
+        return null;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       INITIAL INDEX
+    ========================================================= */
+
+    function getInitialIndex() {
+
+      if (!feed.length) {
+
+        return 0;
+
+      }
+
+
+      /*
+        1. Shared URL has priority.
+      */
+
+      const requestedId =
+        getRequestedShortId();
+
+
+      if (requestedId) {
+
+        const requestedIndex =
+          feed.findIndex(
+            item =>
+              item.id ===
+              requestedId
+          );
+
+
+        if (requestedIndex >= 0) {
+
+          return requestedIndex;
+
+        }
+
+      }
+
+
+      /*
+        2. Restore active Short.
+      */
+
+      const savedId =
+        sessionStorage.getItem(
+          CONFIG.activeStorageKey
+        );
+
+
+      if (savedId) {
+
+        const savedIndex =
+          feed.findIndex(
+            item =>
+              item.id ===
+              savedId
+          );
+
+
+        if (savedIndex >= 0) {
+
+          return savedIndex;
+
+        }
+
+      }
+
+
+      /*
+        3. Restore index.
+      */
+
+      const storedIndex =
+        Number(
+          sessionStorage.getItem(
+            CONFIG.indexStorageKey
+          )
+        );
+
+
+      if (
+
+        Number.isFinite(
+          storedIndex
+        )
+
+        &&
+
+        storedIndex >= 0
+
+        &&
+
+        storedIndex <
+          feed.length
+
+      ) {
+
+        return storedIndex;
+
+      }
+
+
+      /*
+        4. Default.
+      */
+
+      return 0;
+
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+    ========================================================= */
+
+    function escapeHTML(value) {
+
+      return String(
+        value ?? ""
+      )
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+    }
+
+
+    /* =========================================================
+       YOUTUBE ID EXTRACTION
+    ========================================================= */
+
+    function extractYouTubeId(url) {
+
+      if (!url) {
+
+        return "";
+
+      }
+
+
+      try {
+
+        const parsed =
+          new URL(url);
+
+
+        /*
+          youtube.com/shorts/ID
+        */
+
+        if (
+          parsed.pathname.includes(
+            "/shorts/"
+          )
+        ) {
+
+          return parsed.pathname
+
+            .split("/shorts/")[1]
+
+            .split("/")[0];
+
+        }
+
+
+        /*
+          youtube.com/embed/ID
+        */
+
+        if (
+          parsed.pathname.includes(
+            "/embed/"
+          )
+        ) {
+
+          return parsed.pathname
+
+            .split("/embed/")[1]
+
+            .split("/")[0];
+
+        }
+
+
+        /*
+          youtube.com/watch?v=ID
+        */
+
+        const videoParameter =
+          parsed.searchParams.get(
+            "v"
+          );
+
+
+        if (videoParameter) {
+
+          return videoParameter;
+
+        }
+
+
+        /*
+          youtu.be/ID
+        */
+
+        const pieces =
+          parsed.pathname
+            .split("/")
+            .filter(Boolean);
+
+
+        return (
+
+          pieces[
+            pieces.length - 1
+          ]
+
+          ||
+
+          ""
+
+        );
+
+      }
+
+      catch (error) {
+
+        const clean =
+          String(url)
+            .split("?")[0]
+            .split("#")[0];
+
+
+        const pieces =
+          clean
+            .split("/")
+            .filter(Boolean);
+
+
+        return (
+
+          pieces[
+            pieces.length - 1
+          ]
+
+          ||
+
+          ""
+
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       CREATE YOUTUBE EMBED URL
+    ========================================================= */
+
+    function getEmbedURL(item) {
+
+      const videoId =
+        extractYouTubeId(
+          item.url
+        );
+
+
+      if (!videoId) {
+
+        return "";
+
+      }
+
+
+      const parameters =
+        new URLSearchParams({
+
+          autoplay: "0",
+
+          mute: "0",
+
+          loop: "1",
+
+          playlist:
+            videoId,
+
+          controls: "0",
+
+          modestbranding: "0",
+
+          rel: "0",
+
+          playsinline: "1"
+
+        });
+
+
+      return (
+
+        "https://www.youtube.com/embed/"
+
+        +
+
+        encodeURIComponent(
+          videoId
+        )
+
+        +
+
+        "?"
+
+        +
+
+        parameters.toString()
+
+      );
+
+    }
+
+
+    /* =========================================================
+       CREATE VIRTUAL SPACER
+    ========================================================= */
+
+    function createSpacer() {
+
+      const spacer =
+        document.createElement(
+          "div"
+        );
+
+
+      spacer.className =
+        "virtual-spacer";
+
+
+      spacer.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      return spacer;
+
+    }
+
+
+    /* =========================================================
+       GET VIEWPORT HEIGHT
+    ========================================================= */
+
+    function getViewportHeight() {
+
+      return (
+
+        viewport?.clientHeight
+
+        ||
+
+        window.innerHeight
+
+        ||
+
+        1
+
+      );
+
+    }
+
+
+    /* =========================================================
+       UPDATE VIRTUAL SPACERS
+    ========================================================= */
+
+    function updateVirtualSpacers() {
+
+      if (
+
+        !topSpacer
+
+        ||
+
+        !bottomSpacer
+
+      ) {
+
+        return;
+
+      }
+
+
+      const height =
+        getViewportHeight();
+
+
+      topSpacer.style.height =
+
+        (
+          currentIndex *
+          height
+        )
+
+        +
+
+        "px";
+
+
+      bottomSpacer.style.height =
+
+        (
+
+          Math.max(
+
+            0,
+
+            feed.length
+
+            -
+
+            currentIndex
+
+            -
+
+            1
+
+          )
+
+          *
+
+          height
+
+        )
+
+        +
+
+        "px";
+
+    }
+
+
+    /* =========================================================
+       HARD KILL ACTIVE SHORT
+
+       The old Short is completely removed.
+
+       It is NOT hidden.
+
+       It does NOT remain in the DOM.
+    ========================================================= */
+
+    function destroyActiveShort() {
+
+      const oldSlide =
+        activeSlide;
+
+
+      const oldIframe =
+        activeIframe;
+
+
+      /*
+        Release references.
+      */
+
+      activeSlide = null;
+
+      activeIframe = null;
+
+
+      /*
+        Destroy iframe.
+      */
+
+      if (oldIframe) {
+
+        try {
+
+          oldIframe.src =
+            "about:blank";
+
+        }
+
+        catch (error) {}
+
+
+        try {
+
+          oldIframe.removeAttribute(
+            "src"
+          );
+
+        }
+
+        catch (error) {}
+
+
+        try {
+
+          oldIframe.remove();
+
+        }
+
+        catch (error) {}
+
+      }
+
+
+      /*
+        Destroy complete Short.
+      */
+
+      if (oldSlide) {
+
+        try {
+
+          oldSlide.replaceChildren();
+
+        }
+
+        catch (error) {}
+
+
+        try {
+
+          oldSlide.remove();
+
+        }
+
+        catch (error) {}
+
+      }
+
+
+      /*
+        Defensive cleanup.
+
+        There should never be
+        more than one Short.
+      */
+
+      if (viewport) {
+
+        const remainingSlides =
+          viewport.querySelectorAll(
+            ".short-slide"
+          );
+
+
+        remainingSlides.forEach(
+          slide => {
+
+            const iframe =
+              slide.querySelector(
+                "iframe"
+              );
+
+
+            if (iframe) {
+
+              try {
+
+                iframe.src =
+                  "about:blank";
+
+              }
+
+              catch (error) {}
+
+
+              try {
+
+                iframe.remove();
+
+              }
+
+              catch (error) {}
+
+            }
+
+
+            slide.remove();
+
+          }
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SHARE URL
+    ========================================================= */
+
+    function buildShareURL(id) {
+
+      const url =
+        new URL(
+          window.location.href
+        );
+
+
+      /*
+        Remove old parameters.
+      */
+
+      url.search = "";
+
+
+      /*
+        Add Short ID.
+      */
+
+      url.searchParams.set(
+        CONFIG.deepLinkParameter,
+        id
+      );
+
+
+      url.hash = "";
+
+
+      return url.toString();
+
+    }
+
+
+    /* =========================================================
+       SHARE SHORT
+    ========================================================= */
+
+    async function shareShort(
+      item,
+      button
+    ) {
+
+      const url =
+        buildShareURL(
+          item.id
+        );
+
+
+      /*
+        Native mobile sharing.
+      */
+
+      if (navigator.share) {
+
+        try {
+
+          await navigator.share({
+
+            title:
+              item.title ||
+              "Check out this Short",
+
+            text:
+              "Check out this Short",
+
+            url
+
+          });
+
+
+          return;
+
+        }
+
+        catch (error) {
+
+          /*
+            User cancelled sharing.
+          */
+
+          if (
+            error.name ===
+            "AbortError"
+          ) {
+
+            return;
+
+          }
+
+        }
+
+      }
+
+
+      /*
+        Clipboard fallback.
+      */
+
+      try {
+
+        if (
+
+          navigator.clipboard
+
+          &&
+
+          navigator.clipboard.writeText
+
+        ) {
+
+          await navigator.clipboard
+            .writeText(url);
+
+
+          const text =
+            button?.querySelector(
+              ".share-text"
+            );
+
+
+          if (text) {
+
+            const original =
+              text.textContent;
+
+
+            text.textContent =
+              "Copied!";
+
+
+            setTimeout(
+              () => {
+
+                if (
+                  button?.isConnected
+                ) {
+
+                  text.textContent =
+                    original;
+
+                }
+
+              },
+              1500
+            );
+
+          }
+
+
+          return;
+
+        }
+
+      }
+
+      catch (error) {}
+
+
+      /*
+        Final fallback.
+      */
+
+      window.prompt(
+        "Copy this Short link:",
+        url
+      );
+
+    }
+
+
+    /* =========================================================
+       CREATE ACTIVE SHORT
+
+       EXACTLY ONE SHORT
+       AND ONE IFRAME.
+    ========================================================= */
+
+    function createActiveShort(item) {
+
+      const slide =
+        document.createElement(
+          "section"
+        );
+
+
+      slide.className =
+        "short-slide";
+
+
+      slide.dataset.id =
+        item.id;
+
+
+      /* =======================================================
+         CREATE IFRAME
+      ======================================================= */
+
+      const iframe =
+        document.createElement(
+          "iframe"
+        );
+
+
+      iframe.className =
+        "short-embed-frame";
+
+
+      iframe.title =
+        item.title ||
+        "Short video";
+
+
+      iframe.allow =
+
+        "accelerometer; "
+
+        +
+
+        "autoplay; "
+
+        +
+
+        "clipboard-write; "
+
+        +
+
+        "encrypted-media; "
+
+        +
+
+        "gyroscope; "
+
+        +
+
+        "picture-in-picture";
+
+
+      iframe.allowFullscreen =
+        true;
+
+
+      iframe.referrerPolicy =
+        "strict-origin-when-cross-origin";
+
+
+      const embedURL =
+        getEmbedURL(item);
+
+
+      /*
+        YouTube data begins loading
+        ONLY here.
+      */
+
+      if (embedURL) {
+
+        iframe.src =
+          embedURL;
+
+      }
+
+
+      slide.appendChild(
+        iframe
+      );
+
+
+      /* =======================================================
+         ACTION BAR
+      ======================================================= */
+
+      const actions =
+        document.createElement(
+          "aside"
+        );
+
+
+      actions.className =
+        "actions-bar";
+
+
+      actions.innerHTML = `
+
+        <button
+          class="action-btn like-btn"
+          type="button"
+        >
+
+          <div class="action-icon-wrapper">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="
+                M1 21h4V9H1v12zm22-11
+                c0-1.1-.9-2-2-2h-6.31
+                l.95-4.57.03-.32
+                c0-.41-.17-.79-.44-1.06
+                L14.17 1 7.58 7.59
+                C7.22 7.95 7 8.45 7 9
+                v10c0 1.1.9 2 2 2h9
+                c.83 0 1.54-.5 1.84-1.22
+                l3.02-7.05
+                c.09-.23.14-.47.14-.73
+                v-2z
+              "/>
+
+            </svg>
+
+          </div>
+
+          <span>Like</span>
+
+        </button>
+
+
+        <button
+          class="action-btn save-btn"
+          type="button"
+          data-id="${escapeHTML(item.id)}"
+        >
+
+          <div class="action-icon-wrapper">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="
+                M17 3H7
+                c-1.1 0-1.99.9-1.99 2
+                L5 21l7-3 7 3V5
+                c0-1.1-.9-2-2-2z
+              "/>
+
+            </svg>
+
+          </div>
+
+          <span class="save-text">
+            Save
+          </span>
+
+        </button>
+
+
+        <button
+          class="action-btn share-btn"
+          type="button"
+        >
+
+          <div class="action-icon-wrapper">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="
+                M18 16.08
+                c-.76 0-1.44.3-1.96.77
+                L8.91 12.7
+                c.05-.23.09-.46.09-.7
+                s-.03-.47-.09-.7
+                l7.05-4.11
+                A2.99 2.99 0 0 0 18 7.91
+                a3 3 0 1 0-2.96-3.5
+                L8 8.52
+                A3 3 0 1 0 8 15.48
+                l7.05 4.11
+                A3 3 0 1 0 18 16.08z
+              "/>
+
+            </svg>
+
+          </div>
+
+          <span class="share-text">
+            Share
+          </span>
+
+        </button>
+
+
+        <a
+          href="${escapeHTML(item.url || "#")}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action-btn"
+        >
+
+          <div class="action-icon-wrapper">
+
+            <svg viewBox="0 0 24 24">
+
+              <path d="
+                M14 9v-4l7 7-7 7v-4.1
+                c-5 0-8.5 1.6-11 5.1
+                1-5 4-10 11-11z
+              "/>
+
+            </svg>
+
+          </div>
+
+          <span>
+            Open
+          </span>
+
+        </a>
+
+      `;
+
+
+      slide.appendChild(
+        actions
+      );
+
+
+      /* =======================================================
+         BOTTOM INFORMATION
+      ======================================================= */
+
+      const information =
+        document.createElement(
+          "div"
+        );
+
+
+      information.className =
+        "bottom-info";
+
+
+      const creator =
+        escapeHTML(
+          item.creator || ""
+        );
+
+
+      const title =
+        escapeHTML(
+          item.title || ""
+        );
+
+
+      information.innerHTML = `
+
+        <div class="creator-profile">
+
+          <div class="creator-avatar"></div>
+
+
+          <span class="creator-handle">
+
+            ${creator}
+
+          </span>
+
+
+          <button
+            class="subscribe-btn"
+            type="button"
+          >
+
+            Subscribe
+
+          </button>
+
+        </div>
+
+
+        <p class="short-caption">
+
+          ${title}
+
+        </p>
+
+      `;
+
+
+      /*
+        Avatar exists only for
+        the current Short.
+      */
+
+      const avatar =
+        information.querySelector(
+          ".creator-avatar"
+        );
+
+
+      if (
+
+        avatar
+
+        &&
+
+        item.creatorAvatar
+
+      ) {
+
+        avatar.style.backgroundImage =
+
+          `url("${item.creatorAvatar}")`;
+
+      }
+
+
+      slide.appendChild(
+        information
+      );
+
+
+      /* =======================================================
+         SAVE EVENT
+      ======================================================= */
+
+      const saveButton =
+        slide.querySelector(
+          ".save-btn"
+        );
+
+
+      if (saveButton) {
+
+        saveButton.addEventListener(
+
+          "click",
+
+          event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            toggleSaveShort(
+              item.id
+            );
+
+          }
+
+        );
+
+      }
+
+
+      /* =======================================================
+         SHARE EVENT
+      ======================================================= */
+
+      const shareButton =
+        slide.querySelector(
+          ".share-btn"
+        );
+
+
+      if (shareButton) {
+
+        shareButton.addEventListener(
+
+          "click",
+
+          event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            shareShort(
+              item,
+              shareButton
+            );
+
+          }
+
+        );
+
+      }
+
+
+      /* =======================================================
+         LIKE EVENT
+      ======================================================= */
+
+      const likeButton =
+        slide.querySelector(
+          ".like-btn"
+        );
+
+
+      if (likeButton) {
+
+        likeButton.addEventListener(
+
+          "click",
+
+          () => {
+
+            logInteraction(
+              item.id,
+              "like"
+            );
+
+          }
+
+        );
+
+      }
+
+
+      /*
+        Check bookmark state only
+        for active Short.
+      */
+
+      isShortSaved(
+        item.id
+      )
+
+      .then(
+        saved => {
+
+          if (
+
+            activeSlide === slide
+
+            &&
+
+            slide.isConnected
+
+          ) {
+
+            updateShortBookmarkUI(
+              item.id,
+              saved
+            );
+
+          }
+
+        }
+      );
+
+
+      return {
+
+        slide,
+
+        iframe
+
+      };
+
+    }
+
+
+    /* =========================================================
+       SAVE SESSION STATE
+    ========================================================= */
+
+    function saveCurrentState() {
+
+      const item =
+        feed[currentIndex];
+
+
+      if (!item) {
+
+        return;
+
+      }
+
+
+      try {
+
+        sessionStorage.setItem(
+          CONFIG.activeStorageKey,
+          item.id
+        );
+
+
+        sessionStorage.setItem(
+          CONFIG.indexStorageKey,
+          String(currentIndex)
+        );
+
+
+        sessionStorage.setItem(
+          CONFIG.scrollStorageKey,
+          String(viewport.scrollTop)
+        );
+
+      }
+
+      catch (error) {}
+
+    }
+
+
+    /* =========================================================
+       ACTIVATE SHORT
+
+       IMPORTANT:
+
+       1. Destroy old Short completely
+       2. Update index
+       3. Update virtual spacers
+       4. Create ONE new Short
+
+       Result:
+
+       ONLY ONE .short-slide
+       ONLY ONE iframe
+    ========================================================= */
+
+    function activateShort(
+      targetIndex,
+      options = {}
+    ) {
+
+      if (
+        !viewport ||
+        !feed.length
+      ) {
+
+        return;
+
+      }
+
+
+      targetIndex = Math.max(
+        0,
+        Math.min(
+          feed.length - 1,
+          targetIndex
+        )
+      );
+
+
+      if (isRendering) {
+
+        return;
+
+      }
+
+
+      /*
+        Do nothing if this Short
+        is already active.
+      */
+
+      if (
+
+        activeSlide &&
+
+        currentIndex === targetIndex &&
+
+        activeSlide.isConnected &&
+
+        !options.force
+
+      ) {
+
+        return;
+
+      }
+
+
+      isRendering = true;
+
+
+      /*
+        HARD KILL OLD SHORT FIRST.
+      */
+
+      destroyActiveShort();
+
+
+      currentIndex =
+        targetIndex;
+
+
+      updateVirtualSpacers();
+
+
+      const item =
+        feed[currentIndex];
+
+
+      if (!item) {
+
+        isRendering = false;
+
+        return;
+
+      }
+
+
+      /*
+        Create exactly ONE Short.
+      */
+
+      const created =
+        createActiveShort(item);
+
+
+      activeSlide =
+        created.slide;
+
+
+      activeIframe =
+        created.iframe;
+
+
+      /*
+        DOM STRUCTURE:
+
+        topSpacer
+
+        activeSlide
+
+        bottomSpacer
+      */
+
+      viewport.insertBefore(
+        activeSlide,
+        bottomSpacer
+      );
+
+
+      saveCurrentState();
+
+
+      /*
+        Log view.
+      */
+
+      if (
+        lastViewId !== item.id
+      ) {
+
+        lastViewId =
+          item.id;
+
+
+        queueMicrotask(
+          () => {
+
+            logInteraction(
+              item.id,
+              "view"
+            );
+
+          }
+        );
+
+      }
+
+
+      /*
+        Move viewport to the
+        correct virtual position.
+      */
+
+      if (!options.keepScroll) {
+
+        const height =
+          getViewportHeight();
+
+
+        isProgrammaticScroll =
+          true;
+
+
+        viewport.scrollTop =
+          currentIndex * height;
+
+
+        requestAnimationFrame(
+          () => {
+
+            isProgrammaticScroll =
+              false;
+
+          }
+        );
+
+      }
+
+
+      requestAnimationFrame(
+        () => {
+
+          isRendering = false;
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       GET INDEX FROM VIRTUAL SCROLL
+    ========================================================= */
+
+    function getIndexFromScroll() {
+
+      if (!viewport) {
+
+        return currentIndex;
+
+      }
+
+
+      const height =
+        getViewportHeight();
+
+
+      const rawIndex =
+        viewport.scrollTop / height;
+
+
+      return Math.max(
+        0,
+
+        Math.min(
+          feed.length - 1,
+
+          Math.round(rawIndex)
+        )
+      );
+
+    }
+
+
+    /* =========================================================
+       SETTLE SCROLL
+
+       After scrolling stops:
+
+       1. Find nearest Short index
+       2. Destroy old Short
+       3. Create requested Short
+    ========================================================= */
+
+    function settleScroll() {
+
+      if (
+
+        !viewport ||
+
+        isProgrammaticScroll ||
+
+        !feed.length
+
+      ) {
+
+        return;
+
+      }
+
+
+      const targetIndex =
+        getIndexFromScroll();
+
+
+      if (
+        targetIndex !== currentIndex
+      ) {
+
+        activateShort(
+          targetIndex
+        );
+
+      }
+
+      else {
+
+        /*
+          Snap exactly to current Short.
+        */
+
+        const height =
+          getViewportHeight();
+
+
+        isProgrammaticScroll =
+          true;
+
+
+        viewport.scrollTo({
+
+          top:
+            currentIndex * height,
+
+          behavior:
+            "smooth"
+
+        });
+
+
+        setTimeout(
+          () => {
+
+            isProgrammaticScroll =
+              false;
+
+          },
+          300
+        );
+
+      }
+
+
+      saveCurrentState();
+
+    }
+
+
+    /* =========================================================
+       SCROLL HANDLER
+    ========================================================= */
+
+    function onScroll() {
+
+      if (isProgrammaticScroll) {
+
+        return;
+
+      }
+
+
+      clearTimeout(
+        scrollTimer
+      );
+
+
+      scrollTimer =
+        setTimeout(
+
+          settleScroll,
+
+          CONFIG.scrollSettleDelay
+
+        );
+
+    }
+
+
+    /* =========================================================
+       TOUCH NAVIGATION
+    ========================================================= */
+
+    function onTouchStart(event) {
+
+      if (!event.touches.length) {
+
+        return;
+
+      }
+
+
+      touchStartY =
+        event.touches[0].clientY;
+
+    }
+
+
+    function onTouchEnd(event) {
+
+      if (
+        !event.changedTouches.length
+      ) {
+
+        return;
+
+      }
+
+
+      const endY =
+        event.changedTouches[0].clientY;
+
+
+      const difference =
+        touchStartY - endY;
+
+
+      /*
+        Ignore tiny movements.
+      */
+
+      if (
+
+        Math.abs(difference) <
+
+        CONFIG.minimumSwipeDistance
+
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        Swipe UP.
+      */
+
+      if (difference > 0) {
+
+        goNext();
+
+      }
+
+      /*
+        Swipe DOWN.
+      */
+
+      else {
+
+        goPrevious();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       NEXT SHORT
+    ========================================================= */
+
+    function goNext() {
+
+      if (
+        currentIndex >=
+        feed.length - 1
+      ) {
+
+        return;
+
+      }
+
+
+      activateShort(
+        currentIndex + 1
+      );
+
+    }
+
+
+    /* =========================================================
+       PREVIOUS SHORT
+    ========================================================= */
+
+    function goPrevious() {
+
+      if (currentIndex <= 0) {
+
+        return;
+
+      }
+
+
+      activateShort(
+        currentIndex - 1
+      );
+
+    }
+
+
+    /* =========================================================
+       KEYBOARD NAVIGATION
+    ========================================================= */
+
+    function onKeyDown(event) {
+
+      if (
+
+        event.key === "ArrowDown" ||
+
+        event.key === "PageDown"
+
+      ) {
+
+        event.preventDefault();
+
+        goNext();
+
+      }
+
+
+      if (
+
+        event.key === "ArrowUp" ||
+
+        event.key === "PageUp"
+
+      ) {
+
+        event.preventDefault();
+
+        goPrevious();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       WHEEL NAVIGATION
+    ========================================================= */
+
+    let wheelLocked =
+      false;
+
+
+    function onWheel(event) {
+
+      if (wheelLocked) {
+
+        return;
+
+      }
+
+
+      if (
+        Math.abs(event.deltaY) < 20
+      ) {
+
+        return;
+
+      }
+
+
+      wheelLocked =
+        true;
+
+
+      if (event.deltaY > 0) {
+
+        goNext();
+
+      }
+
+      else {
+
+        goPrevious();
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          wheelLocked =
+            false;
+
+        },
+        350
+      );
+
+    }
+
+
+    /* =========================================================
+       RESIZE OPTIMIZATION
+    ========================================================= */
+
+    function onResize() {
+
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      resizeTimer =
+        setTimeout(
+          () => {
+
+            updateVirtualSpacers();
+
+
+            if (viewport) {
+
+              isProgrammaticScroll =
+                true;
+
+
+              viewport.scrollTop =
+                currentIndex *
+                getViewportHeight();
+
+
+              requestAnimationFrame(
+                () => {
+
+                  isProgrammaticScroll =
+                    false;
+
+                }
+              );
+
+            }
+
+          },
+          100
+        );
+
+    }
+
+
+    /* =========================================================
+       BACKGROUND OPTIMIZATION
+
+       When the tab/app goes into
+       the background:
+
+       The current YouTube iframe
+       is completely destroyed.
+
+       When returning:
+
+       ONLY the current Short
+       is recreated.
+    ========================================================= */
+
+    let suspendedIndex =
+      null;
+
+
+    function suspendCurrentShort() {
+
+      if (!activeSlide) {
+
+        return;
+
+      }
+
+
+      suspendedIndex =
+        currentIndex;
+
+
+      destroyActiveShort();
+
+    }
+
+
+    function resumeCurrentShort() {
+
+      if (
+        suspendedIndex === null
+      ) {
+
+        return;
+
+      }
+
+
+      const indexToRestore =
+        suspendedIndex;
+
+
+      suspendedIndex =
+        null;
+
+
+      activateShort(
+        indexToRestore,
+        {
+          force: true
+        }
+      );
+
+    }
+
+
+    function onVisibilityChange() {
+
+      if (document.hidden) {
+
+        suspendCurrentShort();
+
+      }
+
+      else {
+
+        resumeCurrentShort();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       PAGE CLEANUP
+    ========================================================= */
+
+    function cleanupPage() {
+
+      clearTimeout(
+        scrollTimer
+      );
+
+
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      saveCurrentState();
+
+
+      /*
+        Hard kill current Short
+        and iframe.
+      */
+
+      destroyActiveShort();
+
+    }
+
+
+    /* =========================================================
+       CREATE VIRTUAL FEED STRUCTURE
+
+       Initially the DOM contains:
+
+       topSpacer
+       bottomSpacer
+
+       ZERO Shorts.
+
+       The active Short is then
+       inserted between them.
+    ========================================================= */
+
+    function initializeVirtualFeed() {
+
+      /*
+        Remove anything already
+        inside the viewport.
+      */
+
+      viewport.replaceChildren();
+
+
+      topSpacer =
+        createSpacer();
+
+
+      bottomSpacer =
+        createSpacer();
+
+
+      viewport.appendChild(
+        topSpacer
+      );
+
+
+      viewport.appendChild(
+        bottomSpacer
+      );
+
+    }
+
+
+    /* =========================================================
+       MEDIA DATA CHANGE HANDLER
+
+       Optional support for data.js
+       changes.
+    ========================================================= */
+
+    function onMediaDataChanged() {
+
+      const previousId =
+        feed[currentIndex]?.id;
+
+
+      feed =
+        getFrozenSessionFeed();
+
+
+      if (!feed.length) {
+
+        destroyActiveShort();
+
+        return;
+
+      }
+
+
+      let newIndex =
+        feed.findIndex(
+          item =>
+            item.id === previousId
+        );
+
+
+      if (newIndex < 0) {
+
+        newIndex = 0;
+
+      }
+
+
+      activateShort(
+        newIndex,
+        {
+          force: true
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       PUBLIC API
+
+       Optional controls from other
+       JavaScript files.
+    ========================================================= */
+
+    window.ShortPerformance = {
+
+
+      next() {
+
+        goNext();
+
+      },
+
+
+      previous() {
+
+        goPrevious();
+
+      },
+
+
+      goToIndex(index) {
+
+        activateShort(index);
+
+      },
+
+
+      goToId(id) {
+
+        const foundIndex =
+          feed.findIndex(
+            item =>
+              item.id === id
+          );
+
+
+        if (foundIndex >= 0) {
+
+          activateShort(
+            foundIndex
+          );
+
+        }
+
+      },
+
+
+      getState() {
+
+        return {
+
+          activeId:
+
+            feed[currentIndex]?.id
+
+            ||
+
+            null,
+
+
+          currentIndex,
+
+
+          totalShorts:
+            feed.length,
+
+
+          /*
+            DEBUG:
+
+            Normal values:
+
+            domShorts: 1
+            domIframes: 1
+          */
+
+          domShorts:
+
+            viewport
+              ?.querySelectorAll(
+                ".short-slide"
+              )
+              .length
+
+            ||
+
+            0,
+
+
+          domIframes:
+
+            viewport
+              ?.querySelectorAll(
+                "iframe"
+              )
+              .length
+
+            ||
+
+            0
+
+        };
+
+      },
+
+
+      destroy() {
+
+        cleanupPage();
+
+      }
+
+    };
+
+
+    /* =========================================================
+       START APPLICATION
+    ========================================================= */
+
+    function startShorts() {
+
+      viewport =
+        document.getElementById(
+          CONFIG.viewportId
+        );
+
+
+      if (!viewport) {
+
+        return;
+
+      }
+
+
+      /*
+        Read Shorts metadata
+        from data.js.
+
+        This DOES NOT create
+        all Shorts in the DOM.
+      */
+
+      feed =
+        getFrozenSessionFeed();
+
+
+      if (!feed.length) {
+
+        console.warn(
+          "No Shorts found in mediaData"
+        );
+
+        return;
+
+      }
+
+
+      /*
+        Create only two lightweight
+        virtual spacers.
+      */
+
+      initializeVirtualFeed();
+
+
+      /*
+        Determine starting Short.
+
+        Priority:
+
+        1. ?short=s11
+        2. Saved session Short
+        3. Saved session index
+        4. First Short
+      */
+
+      currentIndex =
+        getInitialIndex();
+
+
+      updateVirtualSpacers();
+
+
+      /*
+        Create exactly ONE Short.
+      */
+
+      requestAnimationFrame(
+        () => {
+
+          activateShort(
+            currentIndex,
+            {
+              force: true
+            }
+          );
+
+        }
+      );
+
+
+      /* =======================================================
+         EVENT LISTENERS
+      ======================================================= */
+
+
+      viewport.addEventListener(
+
+        "scroll",
+
+        onScroll,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      viewport.addEventListener(
+
+        "touchstart",
+
+        onTouchStart,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      viewport.addEventListener(
+
+        "touchend",
+
+        onTouchEnd,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      viewport.addEventListener(
+
+        "wheel",
+
+        onWheel,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      document.addEventListener(
+
+        "keydown",
+
+        onKeyDown
+
+      );
+
+
+      document.addEventListener(
+
+        "visibilitychange",
+
+        onVisibilityChange,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      window.addEventListener(
+
+        "resize",
+
+        onResize,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      window.addEventListener(
+
+        "pagehide",
+
+        cleanupPage,
+
+        {
+          passive: true
+        }
+
+      );
+
+
+      /*
+        Optional event from
+        another script/data.js.
+      */
+
+      window.addEventListener(
+
+        "MediaVisibilityChanged",
+
+        onMediaDataChanged,
+
+        {
+          passive: true
+        }
+
+      );
+
+    }
+
+
+    /* =========================================================
+       DOM READY
+    ========================================================= */
+
+    if (
+      document.readyState ===
+      "loading"
+    ) {
+
+      document.addEventListener(
+
+        "DOMContentLoaded",
+
+        startShorts,
+
+        {
+          once: true
+        }
+
+      );
+
+    }
+
+    else {
+
+      startShorts();
+
+    }
+
+
+  })();
+
   </script>
-  <script src="universalshorts.js"></script>
+
 </body>
 </html>

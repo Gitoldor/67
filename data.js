@@ -65,7 +65,7 @@ var allMediaData = [
     url: "https://www.youtube.com/watch?v=Qhaz36TZG5Y",
     href: "https://www.youtube.com/watch?v=Qhaz36TZG5Y",
     creatorAvatar: "https://picsum.photos/id/1025/40/40",
-    plan: "PRO"
+    plan: "PREMIUM"
   },
 
   {
