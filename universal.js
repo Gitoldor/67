@@ -1,23 +1,27 @@
 /* ============================================================
-   UNIVERSAL.JS
-   ============================================================
+   UNIVERSALSHORTS.JS
 
-   FEATURES
+   WORKS WITH:
+   - data.js
+   - Optimized Shorts system
+   - Dynamically created .short-slide
+   - Hard-killed previous Shorts
+
+   FEATURES:
    ------------------------------------------------------------
-   1. Adds Share button to every normal VIDEO thumbnail.
-   2. Share link is generated from the media ID.
-   3. Example:
-        index.html?video=v7
+   ✓ Adds Share button to every active Short UI
+   ✓ Works even when Short is dynamically recreated
+   ✓ No duplicate buttons
+   ✓ Uses Short ID
+   ✓ Creates:
+       index.html?short=s1
 
-   4. Opening that link shows ONLY the shared video.
-   5. Displays "Shared Video" at the top.
-   6. Displays "View All" button.
-   7. View All returns to the normal feed.
-   8. Shorts are NOT modified.
-   9. Existing video-card UI is reused.
-   10. No changes to card HTML/CSS are required.
+   ✓ Native mobile share
+   ✓ Clipboard fallback
+   ✓ Does not create extra iframes
+   ✓ Does not keep old Shorts in DOM
+   ✓ Very lightweight
    ============================================================ */
-
 
 (function () {
 
@@ -26,209 +30,87 @@
 
   /* ==========================================================
      CONFIGURATION
-     ========================================================== */
+  ========================================================== */
 
-  const SHARE_PARAMETER = "video";
+  const SHARE_PARAMETER =
+    "short";
 
-  const VIDEO_CARD_SELECTOR =
-    "#main-feed .video-card";
 
-  const THUMBNAIL_SELECTOR =
-    ".video-thumbnail-box";
+  /*
+    IMPORTANT:
+
+    Your shared Short opens on index.html.
+  */
+
+  const SHARE_PAGE =
+    "index.html";
+
+
+  const SLIDE_SELECTOR =
+    ".short-slide";
+
+
+  const ACTIONS_SELECTOR =
+    ".actions-bar";
+
+
+  const SHARE_BUTTON_CLASS =
+    "universal-short-share-btn";
 
 
   /* ==========================================================
-     GET SHARED VIDEO ID
-     ========================================================== */
+     SHARE ICON
+  ========================================================== */
 
-  function getSharedVideoId() {
+  function getShareIcon() {
 
-    try {
+    return `
 
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
 
-      const id =
-        params.get(
-          SHARE_PARAMETER
-        );
+        <path d="
+          M18 8
+          a3 3 0 1 0-2.82-4
+          c0 .15.01.3.04.44
+          L8.91 7.56
+          A3 3 0 0 0 6 7
+          a3 3 0 1 0 2.91 4.44
+          l6.31 3.12
+          A3 3 0 0 0 15 15
+          a3 3 0 1 0 .22 1.56
+          l-6.31-3.12
+          A3 3 0 0 0 6 17
+          a3 3 0 1 0 2.91-4.44
+          l6.31-3.12
+          A3 3 0 0 0 18 8z
+        "
 
-      if (!id) {
-        return null;
-      }
+        fill="currentColor"
 
-      return id.trim();
+        />
 
-    } catch (error) {
+      </svg>
 
-      console.error(
-        "Universal.js: Could not read shared video ID.",
-        error
-      );
-
-      return null;
-
-    }
+    `;
 
   }
 
 
   /* ==========================================================
-     SHARED VIDEO ID
-     ========================================================== */
-
-  const sharedVideoId =
-    getSharedVideoId();
-
-
-  /* ==========================================================
-     FIND MEDIA BY ID
-     ==========================================================
-
-     IMPORTANT:
-
-     Search allMediaData FIRST.
-
-     mediaData is only the currently-visible/active
-     plan-filtered database.
-
-     allMediaData contains the complete database.
-     ========================================================== */
-
-  function findVideoById(id) {
-
-    if (!id) {
-      return null;
-    }
-
-
-    /* --------------------------------------------------------
-       First search complete database
-       -------------------------------------------------------- */
-
-    if (
-      Array.isArray(
-        window.allMediaData
-      )
-    ) {
-
-      const completeMatch =
-        window.allMediaData.find(
-          function (item) {
-
-            return (
-              String(item.id) ===
-              String(id) &&
-              item.type === "video"
-            );
-
-          }
-        );
-
-      if (completeMatch) {
-        return completeMatch;
-      }
-
-    }
-
-
-    /* --------------------------------------------------------
-       Fallback to visible database
-       -------------------------------------------------------- */
-
-    if (
-      Array.isArray(
-        window.mediaData
-      )
-    ) {
-
-      const visibleMatch =
-        window.mediaData.find(
-          function (item) {
-
-            return (
-              String(item.id) ===
-              String(id) &&
-              item.type === "video"
-            );
-
-          }
-        );
-
-      if (visibleMatch) {
-        return visibleMatch;
-      }
-
-    }
-
-
-    return null;
-
-  }
-
-
-  /* ==========================================================
-     SHARED MEDIA
-     ========================================================== */
-
-  const sharedMedia =
-    findVideoById(
-      sharedVideoId
-    );
-
-
-  /* ==========================================================
-     PREPARE SHARED MODE
-     ==========================================================
-
-     THIS RUNS BEFORE YOUR EXISTING DOMContentLoaded FEED
-     RENDERER.
-
-     Your index.html does:
-
-       data.js
-       universal.js
-       existing script
-
-     Therefore we can safely replace mediaData before
-     the existing renderer does:
-
-       const dataset = mediaData;
-
-     This solves the infinite-feed problem completely.
-     ========================================================== */
-
-  if (
-    sharedVideoId &&
-    sharedMedia
-  ) {
-
-    /*
-      Keep only the requested video.
-
-      We use a new array rather than modifying
-      allMediaData.
-    */
-
-    window.mediaData = [
-      sharedMedia
-    ];
-
-  }
-
-
-  /* ==========================================================
-     INJECT UNIVERSAL CSS
-     ========================================================== */
+     INJECT PROFESSIONAL SHARE BUTTON STYLE
+  ========================================================== */
 
   function injectStyles() {
 
     if (
+
       document.getElementById(
-        "universal-share-styles"
+        "universal-shorts-share-styles"
       )
+
     ) {
 
       return;
@@ -241,164 +123,161 @@
         "style"
       );
 
+
     style.id =
-      "universal-share-styles";
+      "universal-shorts-share-styles";
 
 
     style.textContent = `
 
-      /* ======================================================
+      /* ================================================
          SHARE BUTTON
-         ====================================================== */
+      ================================================= */
 
-      .universal-share-btn {
+      .universal-short-share-btn {
 
-        position: absolute;
+        display: flex !important;
 
-        top: 8px;
+        flex-direction: column !important;
 
-        right: 48px;
+        align-items: center !important;
 
-        width: 32px;
+        justify-content: center !important;
 
-        height: 32px;
+        gap: 4px !important;
 
-        border: none;
+        background: none !important;
 
-        border-radius: 50%;
+        border: none !important;
+
+        color: #ffffff !important;
+
+        font-size: 11px !important;
+
+        font-weight: 500 !important;
+
+        cursor: pointer !important;
+
+        padding: 0 !important;
+
+        margin: 0 !important;
+
+        font-family: inherit !important;
+
+        -webkit-tap-highlight-color:
+          transparent !important;
+
+        touch-action:
+          manipulation !important;
+
+      }
+
+
+      /* ================================================
+         ICON CIRCLE
+      ================================================= */
+
+      .universal-short-share-btn
+      .universal-share-icon-wrapper {
+
+        width: 44px !important;
+
+        height: 44px !important;
+
+        border-radius: 50% !important;
 
         background:
-          rgba(0, 0, 0, 0.68);
+
+          rgba(
+            33,
+            33,
+            33,
+            0.6
+          ) !important;
+
 
         backdrop-filter:
-          blur(5px);
+
+          blur(
+            10px
+          ) !important;
+
 
         -webkit-backdrop-filter:
-          blur(5px);
 
-        color: #ffffff;
+          blur(
+            10px
+          ) !important;
 
-        display: flex;
 
-        align-items: center;
+        display: flex !important;
 
-        justify-content: center;
+        align-items: center !important;
 
-        padding: 0;
-
-        margin: 0;
-
-        cursor: pointer;
-
-        z-index: 10;
+        justify-content: center !important;
 
         transition:
+
           transform 0.15s ease,
-          background 0.15s ease;
+
+          background 0.15s ease !important;
 
       }
 
 
-      .universal-share-btn:active {
+      /* ================================================
+         ICON
+      ================================================= */
+
+      .universal-short-share-btn svg {
+
+        width: 22px !important;
+
+        height: 22px !important;
+
+        fill: #ffffff !important;
+
+        color: #ffffff !important;
+
+        pointer-events: none !important;
+
+      }
+
+
+      /* ================================================
+         ACTIVE EFFECT
+      ================================================= */
+
+      .universal-short-share-btn:active
+      .universal-share-icon-wrapper {
 
         transform:
-          scale(0.88);
+
+          scale(
+            0.88
+          );
 
       }
 
 
-      .universal-share-btn svg {
+      /* ================================================
+         LABEL
+      ================================================= */
 
-        width: 17px;
+      .universal-short-share-btn
+      .universal-share-label {
 
-        height: 17px;
+        color:
+          #ffffff !important;
 
-        pointer-events: none;
+        font-size:
+          11px !important;
 
-      }
+        line-height:
+          1 !important;
 
-
-      /* ======================================================
-         SHARED VIDEO HEADER
-         ====================================================== */
-
-      .universal-shared-header {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 10px;
-
-        padding:
-          8px 2px 14px 2px;
-
-        margin-bottom: 2px;
-
-      }
-
-
-      .universal-shared-label {
-
-        font-size: 18px;
-
-        line-height: 1.2;
-
-        font-weight: 700;
-
-        color: #ffffff;
-
-      }
-
-
-      .universal-view-all {
-
-        border: none;
-
-        background: #ffffff;
-
-        color: #0f0f0f;
-
-        border-radius: 18px;
-
-        padding:
-          7px 13px;
-
-        font-size: 12px;
-
-        font-weight: 700;
-
-        cursor: pointer;
-
-        white-space: nowrap;
-
-      }
-
-
-      .universal-view-all:active {
-
-        transform:
-          scale(0.96);
-
-      }
-
-
-      /* ======================================================
-         SHARED ERROR
-         ====================================================== */
-
-      .universal-shared-error {
-
-        padding:
-          30px 10px;
-
-        text-align: center;
-
-        color: #aaaaaa;
-
-        font-size: 14px;
+        pointer-events:
+          none !important;
 
       }
 
@@ -413,67 +292,200 @@
 
 
   /* ==========================================================
-     SHARE SVG
-     ========================================================== */
+     GET SHORT DATABASE
 
-  function getShareIcon() {
+     Searches:
 
-    return `
+     1. allMediaData
+     2. mediaData
+  ========================================================== */
 
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
+  function getShortDatabase() {
 
-        <circle
-          cx="18"
-          cy="5"
-          r="3"
-        ></circle>
+    const database =
+      [];
 
-        <circle
-          cx="6"
-          cy="12"
-          r="3"
-        ></circle>
 
-        <circle
-          cx="18"
-          cy="19"
-          r="3"
-        ></circle>
+    const seen =
+      new Set();
 
-        <line
-          x1="8.59"
-          y1="13.51"
-          x2="15.42"
-          y2="17.49"
-        ></line>
 
-        <line
-          x1="15.41"
-          y1="6.51"
-          x2="8.59"
-          y2="10.49"
-        ></line>
+    /*
+      Complete database first.
+    */
 
-      </svg>
+    if (
 
-    `;
+      Array.isArray(
+        window.allMediaData
+      )
+
+    ) {
+
+      window.allMediaData.forEach(
+
+        function (item) {
+
+          if (
+
+            item
+
+            &&
+
+            item.type === "shorts"
+
+            &&
+
+            item.id
+
+          ) {
+
+            if (
+
+              !seen.has(
+                String(item.id)
+              )
+
+            ) {
+
+              seen.add(
+                String(item.id)
+              );
+
+
+              database.push(
+                item
+              );
+
+            }
+
+          }
+
+        }
+
+      );
+
+    }
+
+
+    /*
+      Current database fallback.
+    */
+
+    if (
+
+      Array.isArray(
+        window.mediaData
+      )
+
+    ) {
+
+      window.mediaData.forEach(
+
+        function (item) {
+
+          if (
+
+            item
+
+            &&
+
+            item.type === "shorts"
+
+            &&
+
+            item.id
+
+          ) {
+
+            if (
+
+              !seen.has(
+                String(item.id)
+              )
+
+            ) {
+
+              seen.add(
+                String(item.id)
+              );
+
+
+              database.push(
+                item
+              );
+
+            }
+
+          }
+
+        }
+
+      );
+
+    }
+
+
+    return database;
+
+  }
+
+
+  /* ==========================================================
+     FIND SHORT BY ID
+  ========================================================== */
+
+  function findShortById(id) {
+
+    if (!id) {
+      return null;
+    }
+
+
+    const database =
+      getShortDatabase();
+
+
+    return (
+
+      database.find(
+
+        function (item) {
+
+          return (
+
+            String(item.id)
+
+            ===
+
+            String(id)
+
+          );
+
+        }
+
+      )
+
+      ||
+
+      null
+
+    );
 
   }
 
 
   /* ==========================================================
      CREATE SHARE URL
-     ========================================================== */
 
-  function createShareUrl(id) {
+     IMPORTANT:
+
+     ALWAYS CREATES:
+
+     index.html?short=s1
+  ========================================================== */
+
+  function createShareURL(id) {
 
     const url =
       new URL(
@@ -482,27 +494,38 @@
 
 
     /*
-      Remove any existing parameters.
+      Force correct page.
+    */
+
+    url.pathname =
+
+      url.pathname.replace(
+        /[^/]*$/,
+        SHARE_PAGE
+      );
+
+
+    /*
+      Remove old query parameters.
     */
 
     url.search = "";
 
 
+    url.hash = "";
+
+
     /*
-      Add the shared video ID.
+      Add Short ID.
     */
 
     url.searchParams.set(
+
       SHARE_PARAMETER,
+
       id
+
     );
-
-
-    /*
-      Remove hash if one exists.
-    */
-
-    url.hash = "";
 
 
     return url.toString();
@@ -511,133 +534,67 @@
 
 
   /* ==========================================================
-     COPY TO CLIPBOARD
-     ========================================================== */
+     SHARE SHORT
+  ========================================================== */
 
-  async function copyToClipboard(
-    text
-  ) {
+  async function shareShort(item) {
 
-    try {
+    if (
 
-      if (
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-      ) {
+      !item
 
-        await navigator.clipboard.writeText(
-          text
-        );
+      ||
 
-        return true;
+      !item.id
 
-      }
+    ) {
 
-    } catch (error) {
-
-      console.warn(
-        "Clipboard API failed.",
-        error
-      );
-
-    }
-
-
-    /*
-      Older browser fallback.
-    */
-
-    try {
-
-      const textarea =
-        document.createElement(
-          "textarea"
-        );
-
-      textarea.value =
-        text;
-
-      textarea.style.position =
-        "fixed";
-
-      textarea.style.opacity =
-        "0";
-
-      textarea.style.pointerEvents =
-        "none";
-
-      document.body.appendChild(
-        textarea
-      );
-
-      textarea.focus();
-
-      textarea.select();
-
-      const successful =
-        document.execCommand(
-          "copy"
-        );
-
-      textarea.remove();
-
-      return successful;
-
-    } catch (error) {
-
-      console.error(
-        "Clipboard fallback failed.",
-        error
-      );
-
-      return false;
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     SHARE VIDEO
-     ========================================================== */
-
-  async function shareVideo(
-    media
-  ) {
-
-    if (!media || !media.id) {
       return;
+
     }
 
 
-    const shareUrl =
-      createShareUrl(
-        media.id
+    const shareURL =
+      createShareURL(
+        item.id
       );
 
 
     const shareData = {
 
       title:
-        media.title ||
-        "Shared Video",
+
+        item.title
+
+        ||
+
+        "Shared Short",
+
 
       text:
-        media.title ||
-        "Check out this video",
+
+        item.title
+
+        ||
+
+        "Check out this Short",
+
 
       url:
-        shareUrl
+
+        shareURL
 
     };
 
 
-    /*
-      Native Android / browser share.
-    */
+    /* ================================================
+       NATIVE SHARE
+    ================================================= */
 
     if (
+
       navigator.share
+
     ) {
 
       try {
@@ -646,19 +603,28 @@
           shareData
         );
 
+
         return;
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         /*
-          User pressing Cancel is not an error
-          that needs a fallback.
+          User cancelled sharing.
+
+          Do nothing.
         */
 
         if (
-          error &&
+
+          error
+
+          &&
+
           error.name ===
-            "AbortError"
+          "AbortError"
+
         ) {
 
           return;
@@ -670,223 +636,195 @@
     }
 
 
-    /*
-      Clipboard fallback.
-    */
+    /* ================================================
+       CLIPBOARD FALLBACK
+    ================================================= */
 
-    const copied =
-      await copyToClipboard(
-        shareUrl
+    try {
+
+      await navigator.clipboard.writeText(
+        shareURL
       );
 
 
-    if (copied) {
-
-      showTemporaryMessage(
-        "Link copied"
+      showShareMessage(
+        "Link copied!"
       );
 
-    } else {
 
-      /*
-        Last-resort fallback.
-      */
-
-      window.prompt(
-        "Copy this video link:",
-        shareUrl
-      );
+      return;
 
     }
+
+    catch (error) {}
+
+
+    /* ================================================
+       FINAL FALLBACK
+    ================================================= */
+
+    window.prompt(
+
+      "Copy this Short link:",
+
+      shareURL
+
+    );
 
   }
 
 
   /* ==========================================================
-     TEMPORARY MESSAGE
-     ========================================================== */
+     SMALL SHARE MESSAGE
+  ========================================================== */
 
-  function showTemporaryMessage(
-    message
-  ) {
+  function showShareMessage(message) {
 
-    const oldMessage =
-      document.getElementById(
-        "universal-share-message"
+    let toast =
+      document.querySelector(
+        ".universal-short-share-toast"
       );
 
-    if (oldMessage) {
-      oldMessage.remove();
+
+    if (!toast) {
+
+      toast =
+        document.createElement(
+          "div"
+        );
+
+
+      toast.className =
+        "universal-short-share-toast";
+
+
+      toast.style.cssText = `
+
+        position: fixed;
+
+        left: 50%;
+
+        bottom: 28px;
+
+        transform:
+          translateX(-50%);
+
+        background:
+          rgba(20,20,20,.92);
+
+        color:
+          #ffffff;
+
+        padding:
+          10px 16px;
+
+        border-radius:
+          20px;
+
+        font-size:
+          13px;
+
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+
+        z-index:
+          2147483647;
+
+        pointer-events:
+          none;
+
+        opacity:
+          0;
+
+        transition:
+          opacity .2s ease;
+
+      `;
+
+
+      document.body.appendChild(
+        toast
+      );
+
     }
 
 
-    const box =
-      document.createElement(
-        "div"
-      );
-
-    box.id =
-      "universal-share-message";
-
-
-    box.textContent =
+    toast.textContent =
       message;
 
 
-    box.style.position =
-      "fixed";
-
-    box.style.left =
-      "50%";
-
-    box.style.bottom =
-      "24px";
-
-    box.style.transform =
-      "translateX(-50%)";
-
-    box.style.zIndex =
-      "99999";
-
-    box.style.background =
-      "rgba(40,40,40,0.96)";
-
-    box.style.color =
-      "#ffffff";
-
-    box.style.padding =
-      "10px 15px";
-
-    box.style.borderRadius =
-      "20px";
-
-    box.style.fontSize =
-      "13px";
-
-    box.style.fontWeight =
-      "600";
-
-    box.style.boxShadow =
-      "0 5px 25px rgba(0,0,0,.35)";
+    toast.style.opacity =
+      "1";
 
 
-    document.body.appendChild(
-      box
+    clearTimeout(
+      toast._hideTimer
     );
 
 
-    setTimeout(
-      function () {
+    toast._hideTimer =
+      setTimeout(
 
-        box.style.opacity =
-          "0";
+        function () {
 
-        box.style.transition =
-          "opacity .2s ease";
+          toast.style.opacity =
+            "0";
 
-        setTimeout(
-          function () {
+        },
 
-            box.remove();
+        1500
 
-          },
-          220
-        );
-
-      },
-      1800
-    );
+      );
 
   }
 
 
   /* ==========================================================
-     ADD SHARE BUTTON TO ONE VIDEO CARD
-     ========================================================== */
+     GET SHORT ID FROM SLIDE
+  ========================================================== */
 
-  function installShareButton(
-    card
-  ) {
+  function getShortIdFromSlide(slide) {
 
-    if (!card) {
-      return;
-    }
-
-
-    /*
-      Do not install twice.
-    */
-
-    if (
-      card.dataset.universalShareInstalled ===
-      "true"
-    ) {
-
-      return;
-
+    if (!slide) {
+      return null;
     }
 
 
     const id =
-      card.getAttribute(
+      slide.getAttribute(
         "data-id"
       );
 
 
-    if (!id) {
-      return;
-    }
-
-
-    /*
-      Make absolutely sure this is a
-      normal video card.
-    */
-
-    const media =
-      findVideoById(
-        id
-      );
-
-
     if (
-      !media ||
-      media.type !== "video"
+
+      !id
+
+      ||
+
+      !String(id).trim()
+
     ) {
 
-      return;
+      return null;
 
     }
 
 
-    const thumbnail =
-      card.querySelector(
-        THUMBNAIL_SELECTOR
-      );
+    return String(id).trim();
+
+  }
 
 
-    if (!thumbnail) {
-      return;
-    }
+  /* ==========================================================
+     CREATE SHARE BUTTON
+  ========================================================== */
 
-
-    /*
-      Prevent duplicate buttons.
-    */
-
-    if (
-      thumbnail.querySelector(
-        ".universal-share-btn"
-      )
-    ) {
-
-      card.dataset.universalShareInstalled =
-        "true";
-
-      return;
-
-    }
-
+  function createShareButton() {
 
     const button =
       document.createElement(
@@ -897,101 +835,350 @@
     button.type =
       "button";
 
+
     button.className =
-      "universal-share-btn";
+      SHARE_BUTTON_CLASS;
+
 
     button.setAttribute(
+
       "aria-label",
-      "Share video"
+
+      "Share Short"
+
     );
+
 
     button.setAttribute(
+
       "title",
-      "Share video"
+
+      "Share Short"
+
     );
 
 
-    button.innerHTML =
-      getShareIcon();
+    button.innerHTML = `
+
+      <div
+        class="universal-share-icon-wrapper"
+      >
+
+        ${getShareIcon()}
+
+      </div>
 
 
-    /*
-      IMPORTANT:
+      <span
+        class="universal-share-label"
+      >
 
-      This button sits INSIDE the <a>
-      video card.
+        Share
 
-      Therefore prevent the anchor from
-      opening when Share is pressed.
-    */
+      </span>
 
-    button.addEventListener(
-      "click",
-      async function (event) {
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        if (
-          event.stopImmediatePropagation
-        ) {
-
-          event.stopImmediatePropagation();
-
-        }
+    `;
 
 
-        await shareVideo(
-          media
-        );
-
-      },
-      true
-    );
-
-
-    thumbnail.appendChild(
-      button
-    );
-
-
-    card.dataset.universalShareInstalled =
-      "true";
+    return button;
 
   }
 
 
   /* ==========================================================
-     INSTALL SHARE BUTTONS ON ALL CURRENT CARDS
-     ========================================================== */
+     INSTALL SHARE BUTTON
 
-  function installShareButtons() {
+     THIS IS THE IMPORTANT PART.
 
-    const cards =
-      document.querySelectorAll(
-        VIDEO_CARD_SELECTOR
+     Your optimization system deletes
+     and recreates:
+
+       .short-slide
+
+     Therefore this function can be
+     called repeatedly safely.
+
+     It never duplicates buttons.
+  ========================================================== */
+
+  function installShareButton(slide) {
+
+    if (
+
+      !slide
+
+      ||
+
+      !slide.matches(
+        SLIDE_SELECTOR
+      )
+
+    ) {
+
+      return;
+
+    }
+
+
+    const id =
+      getShortIdFromSlide(
+        slide
       );
 
 
-    cards.forEach(
-      function (card) {
+    if (!id) {
+
+      return;
+
+    }
+
+
+    const actions =
+      slide.querySelector(
+        ACTIONS_SELECTOR
+      );
+
+
+    if (!actions) {
+
+      return;
+
+    }
+
+
+    /*
+      Already installed.
+    */
+
+    if (
+
+      actions.querySelector(
+        "." + SHARE_BUTTON_CLASS
+      )
+
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+      Confirm Short exists.
+    */
+
+    const item =
+      findShortById(
+        id
+      );
+
+
+    if (!item) {
+
+      return;
+
+    }
+
+
+    const button =
+      createShareButton();
+
+
+    /*
+      Store ID directly.
+
+      This means the click system
+      does not depend on card order.
+    */
+
+    button.dataset.shortId =
+      id;
+
+
+    /*
+      Put Share button in the
+      existing professional UI.
+
+      Order:
+
+      Like
+      Save
+      Share ← NEW
+      Open
+    */
+
+    const openButton =
+      Array.from(
+        actions.children
+      ).find(
+
+        function (element) {
+
+          return (
+
+            element.tagName === "A"
+
+          );
+
+        }
+
+      );
+
+
+    if (openButton) {
+
+      actions.insertBefore(
+
+        button,
+
+        openButton
+
+      );
+
+    }
+
+    else {
+
+      actions.appendChild(
+        button
+      );
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     INSTALL ON CURRENT SHORTS
+  ========================================================== */
+
+  function installOnCurrentShorts() {
+
+    const slides =
+      document.querySelectorAll(
+        SLIDE_SELECTOR
+      );
+
+
+    slides.forEach(
+
+      function (slide) {
 
         installShareButton(
-          card
+          slide
         );
 
       }
+
     );
 
   }
 
 
   /* ==========================================================
-     WATCH DYNAMIC FEED
-     ========================================================== */
+     CLICK HANDLING
 
-  function startCardObserver() {
+     EVENT DELEGATION.
+
+     IMPORTANT:
+
+     Your active Short can be destroyed
+     at any moment.
+
+     Therefore we attach ONE listener
+     to document.
+
+     No repeated listeners.
+     No memory leaks.
+  ========================================================== */
+
+  document.addEventListener(
+
+    "click",
+
+    async function (event) {
+
+      const button =
+        event.target.closest(
+
+          "." + SHARE_BUTTON_CLASS
+
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      event.preventDefault();
+
+
+      event.stopPropagation();
+
+
+      if (
+
+        event.stopImmediatePropagation
+
+      ) {
+
+        event.stopImmediatePropagation();
+
+      }
+
+
+      const id =
+        button.dataset.shortId;
+
+
+      if (!id) {
+        return;
+      }
+
+
+      const item =
+        findShortById(
+          id
+        );
+
+
+      if (!item) {
+        return;
+      }
+
+
+      await shareShort(
+        item
+      );
+
+    },
+
+    true
+
+  );
+
+
+  /* ==========================================================
+     LIGHTWEIGHT DOM OBSERVER
+
+     This watches ONLY for newly added nodes.
+
+     It does NOT:
+
+     ✗ scan every Short repeatedly
+     ✗ create iframes
+     ✗ modify data.js
+     ✗ keep deleted Shorts alive
+
+     When your optimized system creates:
+
+       .short-slide
+
+     the button is immediately added.
+  ========================================================== */
+
+  function startObserver() {
 
     if (!document.body) {
       return;
@@ -1000,514 +1187,175 @@
 
     const observer =
       new MutationObserver(
-        function () {
 
-          installShareButtons();
+        function (mutations) {
+
+          mutations.forEach(
+
+            function (mutation) {
+
+              mutation.addedNodes.forEach(
+
+                function (node) {
+
+                  if (
+
+                    node.nodeType !== 1
+
+                  ) {
+
+                    return;
+
+                  }
+
+
+                  /*
+                    New Short itself.
+                  */
+
+                  if (
+
+                    node.matches
+
+                    &&
+
+                    node.matches(
+                      SLIDE_SELECTOR
+                    )
+
+                  ) {
+
+                    installShareButton(
+                      node
+                    );
+
+
+                    return;
+
+                  }
+
+
+                  /*
+                    In case a parent containing
+                    a Short was added.
+                  */
+
+                  if (
+
+                    node.querySelectorAll
+
+                  ) {
+
+                    const slides =
+                      node.querySelectorAll(
+                        SLIDE_SELECTOR
+                      );
+
+
+                    slides.forEach(
+
+                      function (slide) {
+
+                        installShareButton(
+                          slide
+                        );
+
+                      }
+
+                    );
+
+                  }
+
+                }
+
+              );
+
+            }
+
+          );
 
         }
+
       );
 
 
     observer.observe(
+
       document.body,
+
       {
-        childList: true,
-        subtree: true
-      }
-    );
 
-  }
+        childList:
+          true,
 
 
-  /* ==========================================================
-     START SHARING SYSTEM
-     ========================================================== */
-
-  function startShareSystem() {
-
-    injectStyles();
-
-    installShareButtons();
-
-    startCardObserver();
-
-
-    /*
-      Backup scans because your feed
-      creates cards asynchronously.
-    */
-
-    setTimeout(
-      installShareButtons,
-      100
-    );
-
-    setTimeout(
-      installShareButtons,
-      300
-    );
-
-    setTimeout(
-      installShareButtons,
-      700
-    );
-
-    setTimeout(
-      installShareButtons,
-      1500
-    );
-
-    setTimeout(
-      installShareButtons,
-      3000
-    );
-
-  }
-
-
-  /* ==========================================================
-     SHARED VIDEO MODE
-     ========================================================== */
-
-  function activateSharedMode() {
-
-    const feed =
-      document.getElementById(
-        "main-feed"
-      );
-
-
-    if (!feed) {
-      return;
-    }
-
-
-    /*
-      We don't immediately manipulate the feed.
-
-      The existing index.html needs to first
-      create its normal video card.
-    */
-
-    let attempts = 0;
-
-    const maxAttempts = 40;
-
-
-    const timer =
-      setInterval(
-        function () {
-
-          attempts++;
-
-
-          const card =
-            feed.querySelector(
-              `.video-card[data-id="${CSS.escape(sharedVideoId)}"]`
-            );
-
-
-          if (card) {
-
-            clearInterval(
-              timer
-            );
-
-            buildSharedLayout(
-              feed,
-              card
-            );
-
-            return;
-
-          }
-
-
-          if (
-            attempts >=
-            maxAttempts
-          ) {
-
-            clearInterval(
-              timer
-            );
-
-          }
-
-        },
-        250
-      );
-
-  }
-
-
-  /* ==========================================================
-     BUILD SHARED LAYOUT
-     ========================================================== */
-
-  function buildSharedLayout(
-    feed,
-    sharedCard
-  ) {
-
-    /*
-      Don't build it twice.
-    */
-
-    if (
-      feed.querySelector(
-        ".universal-shared-header"
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    /*
-      IMPORTANT:
-
-      We DO NOT move the card into another
-      container.
-
-      The existing card stays exactly where
-      the existing feed renderer put it.
-
-      This preserves all existing event
-      listeners, including:
-
-        - Save
-        - Click analytics
-        - View tracking
-    */
-
-
-    const children =
-      Array.from(
-        feed.children
-      );
-
-
-    /*
-      Hide everything except:
-
-        - the requested video
-        - the sentinel
-    */
-
-    children.forEach(
-      function (child) {
-
-        if (
-          child === sharedCard
-        ) {
-
-          child.style.display =
-            "";
-
-          return;
-
-        }
-
-
-        /*
-          Hide sentinel too.
-
-          This prevents more feed content
-          from being generated while viewing
-          a shared video.
-        */
-
-        child.style.display =
-          "none";
+        subtree:
+          true
 
       }
+
     );
-
-
-    const sentinel =
-      document.getElementById(
-        "sentinel"
-      );
-
-
-    if (sentinel) {
-
-      sentinel.style.display =
-        "none";
-
-    }
-
-
-    /*
-      Create header.
-    */
-
-    const header =
-      document.createElement(
-        "div"
-      );
-
-
-    header.className =
-      "universal-shared-header";
-
-
-    header.innerHTML = `
-
-      <div
-        class="universal-shared-label"
-      >
-        Shared Video
-      </div>
-
-      <button
-        type="button"
-        class="universal-view-all"
-      >
-        View All
-      </button>
-
-    `;
-
-
-    /*
-      Put header BEFORE the video.
-
-      Because the other feed elements are
-      display:none, the selected video
-      naturally appears directly underneath.
-    */
-
-    feed.insertBefore(
-      header,
-      sharedCard
-    );
-
-
-    /*
-      View All.
-    */
-
-    const viewAll =
-      header.querySelector(
-        ".universal-view-all"
-      );
-
-
-    if (viewAll) {
-
-      viewAll.addEventListener(
-        "click",
-        function (event) {
-
-          event.preventDefault();
-
-          event.stopPropagation();
-
-
-          /*
-            Remove ?video=...
-            and reload the same index page.
-
-            This is the safest way to restore
-            the original shuffled feed because
-            your index.html creates its feed
-            using local variables captured from
-            mediaData during DOMContentLoaded.
-          */
-
-          const cleanUrl =
-            window.location.origin +
-            window.location.pathname;
-
-
-          window.location.href =
-            cleanUrl;
-
-        }
-      );
-
-    }
-
-
-    /*
-      Make sure Share button is installed
-      on the shared card too.
-    */
-
-    installShareButton(
-      sharedCard
-    );
-
-
-    /*
-      Scroll the actual feed to the top.
-    */
-
-    feed.scrollTop =
-      0;
 
   }
 
 
   /* ==========================================================
-     SHARED VIDEO NOT FOUND
-     ========================================================== */
+     START
+  ========================================================== */
 
-  function showSharedVideoError() {
-
-    if (!sharedVideoId) {
-      return;
-    }
-
-
-    if (sharedMedia) {
-      return;
-    }
-
-
-    const feed =
-      document.getElementById(
-        "main-feed"
-      );
-
-
-    if (!feed) {
-      return;
-    }
-
-
-    /*
-      Avoid duplicate error.
-    */
-
-    if (
-      feed.querySelector(
-        ".universal-shared-error"
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    feed.innerHTML = `
-
-      <div
-        class="universal-shared-header"
-      >
-
-        <div
-          class="universal-shared-label"
-        >
-          Shared Video
-        </div>
-
-        <button
-          type="button"
-          class="universal-view-all"
-        >
-          View All
-        </button>
-
-      </div>
-
-
-      <div
-        class="universal-shared-error"
-      >
-        This video could not be found.
-      </div>
-
-    `;
-
-
-    const button =
-      feed.querySelector(
-        ".universal-view-all"
-      );
-
-
-    if (button) {
-
-      button.addEventListener(
-        "click",
-        function () {
-
-          window.location.href =
-            window.location.origin +
-            window.location.pathname;
-
-        }
-      );
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     INITIALIZE
-     ========================================================== */
-
-  function initialize() {
-
-    /*
-      CSS can be installed immediately.
-    */
+  function startUniversalShorts() {
 
     injectStyles();
 
 
     /*
-      Normal share buttons are installed
-      after DOM is ready.
+      Install button if the active Short
+      already exists.
     */
 
-    startShareSystem();
+    installOnCurrentShorts();
 
 
     /*
-      Shared mode.
+      Detect future dynamically created
+      Shorts.
     */
 
-    if (sharedVideoId) {
-
-      if (sharedMedia) {
-
-        activateSharedMode();
-
-      } else {
-
-        showSharedVideoError();
-
-      }
-
-    }
+    startObserver();
 
   }
 
 
   /* ==========================================================
      DOM READY
-     ========================================================== */
+  ========================================================== */
 
   if (
+
     document.readyState ===
     "loading"
+
   ) {
 
     document.addEventListener(
+
       "DOMContentLoaded",
-      initialize
+
+      startUniversalShorts,
+
+      {
+
+        once: true
+
+      }
+
     );
 
-  } else {
+  }
 
-    initialize();
+  else {
+
+    startUniversalShorts();
 
   }
 

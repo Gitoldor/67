@@ -37,22 +37,22 @@ const superAttributes = {
 
 
 /* ============================================================
-   ALL MEDIA DATA (Total 33 Items: 15 Videos & 18 Shorts)
-   ========================================================== */
+   ALL MEDIA DATA
+   ============================================================ */
 
 var allMediaData = [
 
   /* ==========================================================
-     VIDEOS (15 Items)
+     STANDARD VIDEOS
      ========================================================== */
 
   {
     id: "v1",
     type: "video",
-    title: "कोकणातील एकच वाडी-सावंतवाडी दर्शन",
-    creator: "Bhushan The Explorer",
-    url: "https://www.youtube.com/watch?v=r2IS--OCGls",
-    href: "https://www.youtube.com/watch?v=r2IS--OCGls",
+    title: "Building a Fullstack Web App from Scratch",
+    creator: "freeCodeCamp.org",
+    url: "https://www.youtube.com/watch?v=nu_pCVPKzTk",
+    href: "https://www.youube.com/watch?v=nu_pCVPKzTk",
     creatorAvatar: "https://picsum.photos/id/1005/40/40",
     plan: "PREMIUM"
   },
@@ -60,21 +60,21 @@ var allMediaData = [
   {
     id: "v2",
     type: "video",
-    title: "सावंतवाडीतील एक छोटंसं सुंदर गाव – कोल्झर",
-    creator: "Saurabh Sawant Vlogs",
-    url: "https://www.youtube.com/watch?v=AKYk4uJKHRE",
-    href: "https://www.youtube.com/watch?v=AKYk4uJKHRE",
+    title: "10 CSS Pro Tips - Code This, NOT That!",
+    creator: "Fireship",
+    url: "https://www.youtube.com/watch?v=Qhaz36TZG5Y",
+    href: "https://www.youtube.com/watch?v=Qhaz36TZG5Y",
     creatorAvatar: "https://picsum.photos/id/1025/40/40",
-    plan: "PREMIUM"
+    plan: "PRO"
   },
 
   {
     id: "v3",
     type: "video",
-    title: "My First Vlog | Gig at Sawantwadi",
-    creator: "Marshon Fernandes",
-    url: "https://www.youtube.com/watch?v=cL6_DZKTpIQ",
-    href: "https://www.youtube.com/watch?v=cL6_DZKTpIQ",
+    title: "React Performance Optimization Guide",
+    creator: "Jack Herrington",
+    url: "https://www.youtube.com/watch?v=0y2m93_Mv9k",
+    href: "https://www.youtube.com/watch?v=0y2m93_Mv9k",
     creatorAvatar: "https://picsum.photos/id/1027/40/40",
     plan: "PREMIUM"
   },
@@ -82,10 +82,10 @@ var allMediaData = [
   {
     id: "v4",
     type: "video",
-    title: "Sawantwadi Tourist Places | सावंतवाडी शहराची सफर",
-    creator: "Konkan Tour",
-    url: "https://www.youtube.com/watch?v=q7GLAVL-C-o",
-    href: "https://www.youtube.com/watch?v=q7GLAVL-C-o",
+    title: "System Design Essentials for Engineers",
+    creator: "ByteByteGo",
+    url: "https://www.youtube.com/watch?v=i53Gi_K3o7I",
+    href: "https://www.youtube.com/watch?v=i53Gi_K3o7I",
     creatorAvatar: "https://picsum.photos/id/1035/40/40",
     plan: "BASIC"
   },
@@ -93,10 +93,10 @@ var allMediaData = [
   {
     id: "v5",
     type: "video",
-    title: "निसर्गसौंदर्याने नटलेल्या सावंतवाडी शहराची सफर",
-    creator: "Waman Parulekar Vlogs",
-    url: "https://www.youtube.com/watch?v=aoqHZ_ObT5M",
-    href: "https://www.youtube.com/watch?v=aoqHZ_ObT5M",
+    title: "Mastering Node.js Architecture",
+    creator: "Traversy Media",
+    url: "https://www.youtube.com/watch?v=fBNz5xF-Kx4",
+    href: "https://www.youtube.com/watch?v=fBNz5xF-Kx4",
     creatorAvatar: "https://picsum.photos/id/1040/40/40",
     plan: "PRO"
   },
@@ -104,10 +104,10 @@ var allMediaData = [
   {
     id: "v6",
     type: "video",
-    title: "Sawantwadi - Konkan’s most underrated beauty",
-    creator: "Riding The Wanderlust",
-    url: "https://www.youtube.com/watch?v=J6uwrggQyEo",
-    href: "https://www.youtube.com/watch?v=J6uwrggQyEo",
+    title: "Tailwind CSS Tutorial for Beginners",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/watch?v=dFgzHOX84xQ",
+    href: "https://www.youtube.com/watch?v=dFgzHOX84xQ",
     creatorAvatar: "https://picsum.photos/id/1062/40/40",
     plan: "PREMIUM"
   },
@@ -115,10 +115,10 @@ var allMediaData = [
   {
     id: "v7",
     type: "video",
-    title: "Walking tour of Sawantwadi, Maharashtra",
-    creator: "Memorable Journeys",
-    url: "https://www.youtube.com/watch?v=70aCMntByzA",
-    href: "https://www.youtube.com/watch?v=70aCMntByzA",
+    title: "Docker Crash Course for Beginners",
+    creator: "TechWorld with Nana",
+    url: "https://www.youtube.com/watch?v=3c-iBn73dDE",
+    href: "https://www.youtube.com/watch?v=3c-iBn73dDE",
     creatorAvatar: "https://picsum.photos/id/1069/40/40",
     plan: "BASIC"
   },
@@ -126,10 +126,10 @@ var allMediaData = [
   {
     id: "v8",
     type: "video",
-    title: "Sawantwadi Khau Galli | Kokan Street Food",
-    creator: "Bharatiya Touring Party",
-    url: "https://www.youtube.com/watch?v=962lpJyO6ks",
-    href: "https://www.youtube.com/watch?v=962lpJyO6ks",
+    title: "Building Real-time Apps with WebSockets",
+    creator: "Fireship",
+    url: "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    href: "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     creatorAvatar: "https://picsum.photos/id/1074/40/40",
     plan: "PRO"
   },
@@ -137,10 +137,10 @@ var allMediaData = [
   {
     id: "v9",
     type: "video",
-    title: "Sawantwadi | Kokan🌴 | Sindhudurg",
-    creator: "Nana",
-    url: "https://www.youtube.com/watch?v=LL1xfSaKddw",
-    href: "https://www.youtube.com/watch?v=LL1xfSaKddw",
+    title: "TypeScript Full Course for Beginners",
+    creator: "Programming with Mosh",
+    url: "https://www.youtube.com/watch?v=d56mG7DezGs",
+    href: "https://www.youtube.com/watch?v=d56mG7DezGs",
     creatorAvatar: "https://picsum.photos/id/1005/40/40",
     plan: "PREMIUM"
   },
@@ -148,10 +148,10 @@ var allMediaData = [
   {
     id: "v10",
     type: "video",
-    title: "Sawantwadi Town & Rajwada History",
-    creator: "Konkan Explorer",
-    url: "https://www.youtube.com/watch?v=r2IS--OCGls",
-    href: "https://www.youtube.com/watch?v=r2IS--OCGls",
+    title: "How Large Language Models Work",
+    creator: "3Blue1Brown",
+    url: "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    href: "https://www.youtube.com/watch?v=wjZofJX0v4M",
     creatorAvatar: "https://picsum.photos/id/1080/40/40",
     plan: "BASIC"
   },
@@ -159,10 +159,10 @@ var allMediaData = [
   {
     id: "v11",
     type: "video",
-    title: "Exploring Moti Talao & Palace Grounds",
-    creator: "Sindhudurg Diaries",
-    url: "https://www.youtube.com/watch?v=q7GLAVL-C-o",
-    href: "https://www.youtube.com/watch?v=q7GLAVL-C-o",
+    title: "Figma UI Design Tutorial",
+    creator: "DesignCourse",
+    url: "https://www.youtube.com/watch?v=6t_dYhXyYjI",
+    href: "https://www.youtube.com/watch?v=6t_dYhXyYjI",
     creatorAvatar: "https://picsum.photos/id/1025/40/40",
     plan: "PRO"
   },
@@ -170,10 +170,10 @@ var allMediaData = [
   {
     id: "v12",
     type: "video",
-    title: "Traditional Wooden Toys of Sawantwadi",
-    creator: "Craft Heritage India",
-    url: "https://www.youtube.com/watch?v=aoqHZ_ObT5M",
-    href: "https://www.youtube.com/watch?v=aoqHZ_ObT5M",
+    title: "Learn PostgreSQL Tutorial - Full Course for Beginners",
+    creator: "freeCodeCamp.org",
+    url: "https://www.youtube.com/watch?v=qw--VYLpxG4",
+    href: "https://www.youtube.com/watch?v=qw--VYLpxG4",
     creatorAvatar: "https://picsum.photos/id/1084/40/40",
     plan: "PREMIUM"
   },
@@ -181,10 +181,10 @@ var allMediaData = [
   {
     id: "v13",
     type: "video",
-    title: "Malvani Food Tour in Sawantwadi Market",
-    creator: "Food Ranger Kokan",
-    url: "https://www.youtube.com/watch?v=962lpJyO6ks",
-    href: "https://www.youtube.com/watch?v=962lpJyO6ks",
+    title: "TypeScript Generics Tutorial",
+    creator: "Web Dev Simplified",
+    url: "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    href: "https://www.youtube.com/watch?v=EcCTIExsqmI",
     creatorAvatar: "https://picsum.photos/id/1011/40/40",
     plan: "BASIC"
   },
@@ -192,10 +192,10 @@ var allMediaData = [
   {
     id: "v14",
     type: "video",
-    title: "Monsoon Drive through Amboli Ghat to Sawantwadi",
-    creator: "DriveWithMe",
-    url: "https://www.youtube.com/watch?v=J6uwrggQyEo",
-    href: "https://www.youtube.com/watch?v=J6uwrggQyEo",
+    title: "Flexbox in 100 Seconds",
+    creator: "Fireship",
+    url: "https://www.youtube.com/watch?v=K74l26pE4YA",
+    href: "https://www.youtube.com/watch?v=K74l26pE4YA",
     creatorAvatar: "https://picsum.photos/id/1082/40/40",
     plan: "PRO"
   },
@@ -203,25 +203,25 @@ var allMediaData = [
   {
     id: "v15",
     type: "video",
-    title: "Hidden Waterfalls & Nature Trails near Sawantwadi",
-    creator: "Wild Konkan",
-    url: "https://www.youtube.com/watch?v=70aCMntByzA",
-    href: "https://www.youtube.com/watch?v=70aCMntByzA",
+    title: "7 Clean Code Tips You Should Know",
+    creator: "CodeAesthetic",
+    url: "https://www.youtube.com/watch?v=CFRhGnuXG-4",
+    href: "https://www.youtube.com/watch?v=CFRhGnuXG-4",
     creatorAvatar: "https://picsum.photos/id/1035/40/40",
     plan: "PREMIUM"
   },
 
 
   /* ==========================================================
-     YOUTUBE SHORTS (18 Items)
+     REAL YOUTUBE SHORTS
      ========================================================== */
 
   {
     id: "s1",
     type: "shorts",
-    title: "The Royal Magic of Sawantwadi",
-    creator: "Neel Madhav",
-    url: "https://www.youtube.com/shorts/CvHfEYGQyYM",
+    title: "Don't Use JavaScript for This - Part 1",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/zoJkZ7GC1s4",
     creatorAvatar: "https://picsum.photos/id/1011/40/40",
     plan: "BASIC"
   },
@@ -229,9 +229,9 @@ var allMediaData = [
   {
     id: "s2",
     type: "shorts",
-    title: "महाराष्ट्र का आखिरी जीला सावंतवाड़ी",
-    creator: "Travel Shorts",
-    url: "https://www.youtube.com/shorts/3B5pO1SUgYE",
+    title: "Responsive Scrolling with CSS",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/G7bKldPwBmk",
     creatorAvatar: "https://picsum.photos/id/1062/40/40",
     plan: "PRO"
   },
@@ -239,9 +239,9 @@ var allMediaData = [
   {
     id: "s3",
     type: "shorts",
-    title: "सावंतवाडीत दगड खाणीत मारहाण घटना",
-    creator: "LS Marathi",
-    url: "https://www.youtube.com/shorts/Xq1FgoakQmI",
+    title: "The Scrollbar Control You Didn't Know You Needed",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/ZFhPGfLfSa8",
     creatorAvatar: "https://picsum.photos/id/1025/40/40",
     plan: "PREMIUM"
   },
@@ -249,9 +249,9 @@ var allMediaData = [
   {
     id: "s4",
     type: "shorts",
-    title: "Sawantwadi Enclave Lobby Gym Garden",
-    creator: "Landkraft Spaces",
-    url: "https://www.youtube.com/shorts/5p3qR-5eUzI",
+    title: "CSS Shorthands Aren't Always Worth It",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/iTps-EehgKc",
     creatorAvatar: "https://picsum.photos/id/1027/40/40",
     plan: "BASIC"
   },
@@ -259,9 +259,9 @@ var allMediaData = [
   {
     id: "s5",
     type: "shorts",
-    title: "आजोबा पड़ले तलावात सावंतवाडी",
-    creator: "Ride With Kokankar",
-    url: "https://www.youtube.com/shorts/RueA5BZQ60o",
+    title: "Simplify Your Code with This Pseudo-Class",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/wk79huqm1h4",
     creatorAvatar: "https://picsum.photos/id/1074/40/40",
     plan: "PRO"
   },
@@ -269,9 +269,9 @@ var allMediaData = [
   {
     id: "s6",
     type: "shorts",
-    title: "sawantwadi beauty of sindhudurg",
-    creator: "30 sec LIFE",
-    url: "https://www.youtube.com/shorts/FisLGEMTsD4",
+    title: "Number Inputs Aren't So Straight-Forward",
+    creator: "Kevin Powell",
+    url: "https://www.youtube.com/shorts/nnZS761ngXE",
     creatorAvatar: "https://picsum.photos/id/1040/40/40",
     plan: "PREMIUM"
   },
@@ -279,9 +279,9 @@ var allMediaData = [
   {
     id: "s7",
     type: "shorts",
-    title: "Best Cocktail spot in sawantwadi",
-    creator: "खादाड कन्या",
-    url: "https://www.youtube.com/shorts/zsee3MH9GtI",
+    title: "Social Media Icons with Hover Tooltip",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/NobIwYsX8XI",
     creatorAvatar: "https://picsum.photos/id/1005/40/40",
     plan: "BASIC"
   },
@@ -289,9 +289,9 @@ var allMediaData = [
   {
     id: "s8",
     type: "shorts",
-    title: "Sawantwadi lake sunset view",
-    creator: "Ride With Kokankar",
-    url: "https://www.youtube.com/shorts/N_N3a0aPTeM",
+    title: "Simple Sign In Form UI",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/IjqSSyjrWPA",
     creatorAvatar: "https://picsum.photos/id/1062/40/40",
     plan: "PRO"
   },
@@ -299,9 +299,9 @@ var allMediaData = [
   {
     id: "s9",
     type: "shorts",
-    title: "Moti Talao Fountain Lights",
-    creator: "Konkan Shorts",
-    url: "https://www.youtube.com/shorts/CvHfEYGQyYM",
+    title: "Creative Menu Hover Effects",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/DgHJZuVu7bE",
     creatorAvatar: "https://picsum.photos/id/1025/40/40",
     plan: "PREMIUM"
   },
@@ -309,9 +309,9 @@ var allMediaData = [
   {
     id: "s10",
     type: "shorts",
-    title: "Sawantwadi Palace Durbar Hall",
-    creator: "Heritage Walks",
-    url: "https://www.youtube.com/shorts/3B5pO1SUgYE",
+    title: "Social Icons Hover Effects",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/IQcVTmO34Tw",
     creatorAvatar: "https://picsum.photos/id/1027/40/40",
     plan: "BASIC"
   },
@@ -319,9 +319,9 @@ var allMediaData = [
   {
     id: "s11",
     type: "shorts",
-    title: "Ganjifa Card Making in Sawantwadi",
-    creator: "Artisan Guild",
-    url: "https://www.youtube.com/shorts/Xq1FgoakQmI",
+    title: "Tags Input Field Using JavaScript",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/AW66n-xzytI",
     creatorAvatar: "https://picsum.photos/id/1074/40/40",
     plan: "PRO"
   },
@@ -329,9 +329,9 @@ var allMediaData = [
   {
     id: "s12",
     type: "shorts",
-    title: "Morning Vibes at Sawantwadi Market",
-    creator: "KokanVibes",
-    url: "https://www.youtube.com/shorts/5p3qR-5eUzI",
+    title: "Modern Digital Clock UI",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/wEV3uYCYcJ0",
     creatorAvatar: "https://picsum.photos/id/1084/40/40",
     plan: "PREMIUM"
   },
@@ -339,9 +339,9 @@ var allMediaData = [
   {
     id: "s13",
     type: "shorts",
-    title: "Chitale Bandhu & Local Sweets",
-    creator: "FoodieShorts",
-    url: "https://www.youtube.com/shorts/RueA5BZQ60o",
+    title: "Animated Download Button",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/Rk8W1dfmxHA",
     creatorAvatar: "https://picsum.photos/id/1035/40/40",
     plan: "BASIC"
   },
@@ -349,9 +349,9 @@ var allMediaData = [
   {
     id: "s14",
     type: "shorts",
-    title: "Narendra Hill Top View",
-    creator: "Sindhudurg Peaks",
-    url: "https://www.youtube.com/shorts/FisLGEMTsD4",
+    title: "Animated Login Form",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/UAoT_QOuL90",
     creatorAvatar: "https://picsum.photos/id/1011/40/40",
     plan: "PRO"
   },
@@ -359,9 +359,9 @@ var allMediaData = [
   {
     id: "s15",
     type: "shorts",
-    title: "Rajaram Stadium Evening Vibe",
-    creator: "Local Sports",
-    url: "https://www.youtube.com/shorts/zsee3MH9GtI",
+    title: "Apple Liquid Navigation Bar",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/RNJpgEHeO8A",
     creatorAvatar: "https://picsum.photos/id/1069/40/40",
     plan: "PREMIUM"
   },
@@ -369,9 +369,9 @@ var allMediaData = [
   {
     id: "s16",
     type: "shorts",
-    title: "Cashew Processing Unit in Sawantwadi",
-    creator: "KokanAgri",
-    url: "https://www.youtube.com/shorts/N_N3a0aPTeM",
+    title: "Animated Toggle Switch",
+    creator: "CodeByGaurav",
+    url: "https://www.youtube.com/shorts/olwPaNJn59g",
     creatorAvatar: "https://picsum.photos/id/1062/40/40",
     plan: "BASIC"
   },
@@ -379,9 +379,9 @@ var allMediaData = [
   {
     id: "s17",
     type: "shorts",
-    title: "Traditional Gauri Ganpati Festival",
-    creator: "Festival Reels",
-    url: "https://www.youtube.com/shorts/CvHfEYGQyYM",
+    title: "Python File Handling Tutorial",
+    creator: "CodeOneDigest",
+    url: "https://www.youtube.com/shorts/TeCuTFP5IZU",
     creatorAvatar: "https://picsum.photos/id/1080/40/40",
     plan: "PRO"
   },
@@ -389,9 +389,9 @@ var allMediaData = [
   {
     id: "s18",
     type: "shorts",
-    title: "Bye Bye Sawantwadi - Road Trip End",
-    creator: "Wanderlust Diary",
-    url: "https://www.youtube.com/shorts/3B5pO1SUgYE",
+    title: "Difference Between Python Modules, Packages and Libraries",
+    creator: "CodeOneDigest",
+    url: "https://www.youtube.com/shorts/J8GfcfghfWQ",
     creatorAvatar: "https://picsum.photos/id/1082/40/40",
     plan: "PREMIUM"
   }
@@ -467,6 +467,12 @@ function isMediaPlanActive(plan) {
 
 function shuffleMedia(array) {
 
+  /*
+    Fisher-Yates shuffle
+
+    Gives every item a proper random position.
+  */
+
   for (
     var i = array.length - 1;
     i > 0;
@@ -477,6 +483,7 @@ function shuffleMedia(array) {
       Math.floor(
         Math.random() * (i + 1)
       );
+
 
     var temp =
       array[i];
@@ -500,6 +507,11 @@ function shuffleMedia(array) {
 
 function buildMediaDatabase() {
 
+  /*
+    First filter media according to
+    the active plan.
+  */
+
   mediaData = allMediaData.filter(
     function(media) {
 
@@ -509,6 +521,15 @@ function buildMediaDatabase() {
 
     }
   );
+
+
+  /*
+    Then shuffle the currently
+    visible media.
+
+    The original allMediaData
+    order is NOT changed.
+  */
 
   shuffleMedia(
     mediaData
@@ -539,11 +560,22 @@ function logInteraction(id, type) {
 
 /* ============================================================
    UNIVERSAL CARD HREF LOGIC
+   ============================================================
+   
+   This part makes the href in this data file control
+   what happens when a VIDEO CARD is clicked.
+
+   No UI/card-rendering code needs to be edited.
    ============================================================ */
 
 (function setupMediaCardHrefLogic() {
 
   var installedCards = new WeakSet();
+
+
+  /* ----------------------------------------------------------
+     Get currently visible cards
+     ---------------------------------------------------------- */
 
   function getCards() {
 
@@ -554,6 +586,11 @@ function logInteraction(id, type) {
     );
 
   }
+
+
+  /* ----------------------------------------------------------
+     Find the media belonging to a card
+     ---------------------------------------------------------- */
 
   function getMediaForCard(card) {
 
@@ -566,6 +603,12 @@ function logInteraction(id, type) {
       return null;
     }
 
+
+    /*
+      active media is normally rendered in the
+      same order as mediaData.
+    */
+
     if (
       Array.isArray(mediaData) &&
       mediaData[index]
@@ -574,6 +617,11 @@ function logInteraction(id, type) {
       return mediaData[index];
 
     }
+
+
+    /*
+      Fallback to allMediaData.
+    */
 
     if (
       Array.isArray(allMediaData) &&
@@ -584,8 +632,14 @@ function logInteraction(id, type) {
 
     }
 
+
     return null;
   }
+
+
+  /* ----------------------------------------------------------
+     Handle card click
+     ---------------------------------------------------------- */
 
   function handleCardClick(event) {
 
@@ -599,6 +653,13 @@ function logInteraction(id, type) {
       return;
     }
 
+
+    /*
+      ONLY normal videos use href.
+
+      Shorts keep their existing UI behavior.
+    */
+
     if (
       media.type !== "video"
     ) {
@@ -606,6 +667,7 @@ function logInteraction(id, type) {
       return;
 
     }
+
 
     if (
       !media.href
@@ -615,14 +677,30 @@ function logInteraction(id, type) {
 
     }
 
+
+    /*
+      Stop the existing UI click handler
+      from opening the old YouTube URL.
+    */
+
     event.preventDefault();
 
     event.stopImmediatePropagation();
+
+
+    /*
+      Open the href from THIS data.js.
+    */
 
     window.location.href =
       media.href;
 
   }
+
+
+  /* ----------------------------------------------------------
+     Install click handler on every video card
+     ---------------------------------------------------------- */
 
   function install() {
 
@@ -640,12 +718,18 @@ function logInteraction(id, type) {
 
         }
 
+
         var media =
           getMediaForCard(card);
 
         if (!media) {
           return;
         }
+
+
+        /*
+          Only normal video cards.
+        */
 
         if (
           media.type !== "video"
@@ -655,6 +739,7 @@ function logInteraction(id, type) {
 
         }
 
+
         if (
           !media.href
         ) {
@@ -663,15 +748,30 @@ function logInteraction(id, type) {
 
         }
 
+
         installedCards.add(
           card
         );
+
+
+        /*
+          Capture phase is important.
+
+          It lets this handler run before
+          the existing card click handler.
+        */
 
         card.addEventListener(
           "click",
           handleCardClick,
           true
         );
+
+
+        /*
+          Also make the card behave like a link
+          visually/semantically.
+        */
 
         card.setAttribute(
           "data-href",
@@ -686,6 +786,11 @@ function logInteraction(id, type) {
 
   }
 
+
+  /* ----------------------------------------------------------
+     Watch for cards created dynamically
+     ---------------------------------------------------------- */
+
   function startObserver() {
 
     if (
@@ -696,6 +801,7 @@ function logInteraction(id, type) {
 
     }
 
+
     var observer =
       new MutationObserver(
         function() {
@@ -704,6 +810,7 @@ function logInteraction(id, type) {
 
         }
       );
+
 
     observer.observe(
       document.body,
@@ -715,19 +822,50 @@ function logInteraction(id, type) {
 
   }
 
+
+  /* ----------------------------------------------------------
+     Start after DOM is ready
+     ---------------------------------------------------------- */
+
   function start() {
 
     install();
 
     startObserver();
 
-    setTimeout(install, 250);
-    setTimeout(install, 500);
-    setTimeout(install, 1000);
-    setTimeout(install, 2000);
-    setTimeout(install, 4000);
+
+    /*
+      Backup scans because the map/card UI is
+      rendered asynchronously.
+    */
+
+    setTimeout(
+      install,
+      250
+    );
+
+    setTimeout(
+      install,
+      500
+    );
+
+    setTimeout(
+      install,
+      1000
+    );
+
+    setTimeout(
+      install,
+      2000
+    );
+
+    setTimeout(
+      install,
+      4000
+    );
 
   }
+
 
   if (
     document.readyState ===
@@ -764,7 +902,9 @@ setInterval(
         )
         .join(",");
 
+
     buildMediaDatabase();
+
 
     var afterIds =
       mediaData
@@ -774,6 +914,7 @@ setInterval(
           }
         )
         .join(",");
+
 
     if (
       beforeIds !== afterIds
