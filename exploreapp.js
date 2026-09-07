@@ -30,7 +30,7 @@
     textColor: "#111111",
     
     tabs: {
-      map: { title: "Map View", url: "map.html", desc: "Live Tracking" },
+      map: { title: "Map View", url: "https://gitoldor.github.io/SAWANTWADI-by-THE12/", desc: "Live Tracking" },
       explore: { title: "Explore", url: "nofeature.html", desc: "Discover Content" },
       leftPlaceholder: { title: "Tab 1", url: "#", desc: "Placeholder" },
       media: { title: "Media", url: "https://gitoldor.github.io/67/index.html", desc: "Audio & Visuals" },
