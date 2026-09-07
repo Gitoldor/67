@@ -1,22 +1,19 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My Progressive Web App",
-  "start_url": "index.html",
-  "scope": "./",
+  "name": "My Progressive Web App",
+  "short_name": "MyPWA",
+  "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#317EFB",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "https://i.ibb.co/zWLKpGCb/IMG-20260907-153844-963.jpg",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "https://i.ibb.co/zWLKpGCb/IMG-20260907-153844-963.jpg",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
